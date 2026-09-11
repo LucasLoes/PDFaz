@@ -1426,52 +1426,459 @@ body.mode-recibo .native-pdf-icon-badge {
   transform: rotate(90deg);
 }
 
-/* Corpo do Visualizador com iframe */
+/* Botão de PDF Externo no cabeçalho */
+.btn-raw-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-color: #CBD5E1;
+  color: #475569;
+  background-color: #FFFFFF;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.btn-raw-pdf:hover {
+  background-color: #F1F5F9;
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+body.mode-recibo .btn-raw-pdf:hover {
+  color: #059669;
+  border-color: #059669;
+}
+
+/* Corpo do Visualizador com Folha A4 de Alta Fidelidade */
 .native-pdf-modal-body {
   flex: 1;
-  background-color: #475569;
+  background-color: #334155;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 16px;
   display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.native-pdf-iframe {
+.native-pdf-sheet-wrapper {
   width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-  background-color: #475569;
+  display: flex;
+  justify-content: center;
 }
 
-.native-pdf-loading {
+/* Folha A4 Realista */
+.native-a4-preview-sheet {
+  background-color: #FFFFFF;
+  width: 100%;
+  max-width: 800px;
+  min-height: 1080px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  padding: 38px 42px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1E293B;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.a4-top-stripe {
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
+  height: 5px;
+  background: #2563EB;
+}
+
+.native-a4-preview-sheet.recibo-mode .a4-top-stripe {
+  background: #059669;
+}
+
+/* Header da Folha A4 */
+.a4-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  gap: 16px;
+}
+
+.a4-brand-name {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.a4-brand-subtitle {
+  font-size: 0.80rem;
+  color: #64748B;
+  margin-top: 3px;
+}
+
+.a4-badge-box {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.a4-type-badge {
+  background-color: #2563EB;
+  color: #FFFFFF;
+  font-size: 0.80rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 5px 14px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.native-a4-preview-sheet.recibo-mode .a4-type-badge {
+  background-color: #ECFDF5;
+  color: #059669;
+  border: 1.5px solid #059669;
+}
+
+.a4-meta-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.80rem;
+  color: #475569;
+  line-height: 1.6;
+  text-align: right;
+}
+
+.a4-meta-list strong {
+  color: #0F172A;
+}
+
+.a4-divider {
+  height: 1px;
+  background-color: #E2E8F0;
+  margin: 10px 0 16px 0;
+}
+
+/* Partes (DE / PARA) */
+.a4-parties-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.a4-party-card {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.a4-party-tag {
+  font-size: 0.70rem;
+  font-weight: 800;
+  color: #2563EB;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.native-a4-preview-sheet.recibo-mode .a4-party-tag {
+  color: #059669;
+}
+
+.a4-party-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.a4-party-details {
+  font-size: 0.78rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+/* Tabela de Itens */
+.a4-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 0.82rem;
+}
+
+.a4-table th {
+  background-color: #2563EB;
+  color: #FFFFFF;
+  font-weight: 700;
+  text-align: left;
+  padding: 8px 10px;
+  border: 1px solid #2563EB;
+}
+
+.native-a4-preview-sheet.recibo-mode .a4-table th {
+  background-color: #059669;
+  border-color: #059669;
+}
+
+.a4-table td {
+  padding: 8px 10px;
+  border: 1px solid #E2E8F0;
+  color: #1E293B;
+}
+
+.a4-table tr:nth-child(even) td {
+  background-color: #F8FAFC;
+}
+
+.a4-table .col-num { width: 36px; text-align: center; }
+.a4-table .col-desc { text-align: left; }
+.a4-table .col-qty { width: 50px; text-align: center; }
+.a4-table .col-price { width: 110px; text-align: right; }
+.a4-table .col-total { width: 110px; text-align: right; font-weight: 700; }
+
+/* Bloco Inferior: PIX / Declaração e Totais */
+.a4-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+
+.a4-pix-card {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+
+.a4-pix-title {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #2563EB;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+
+.a4-pix-content {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.a4-pix-qr {
+  width: 80px;
+  height: 80px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.a4-pix-qr img {
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.92);
+  object-fit: contain;
+}
+
+.a4-pix-info {
+  font-size: 0.78rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.a4-pix-info strong {
+  color: #0F172A;
+}
+
+/* Declaração de Quitação no Recibo */
+.a4-recibo-declaration {
+  background-color: #ECFDF5;
+  border: 1.5px solid #10B981;
+  border-radius: 6px;
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.a4-recibo-declaration::after {
+  content: "QUITADO";
+  position: absolute;
+  right: 12px;
+  bottom: 4px;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: rgba(5, 150, 105, 0.12);
+  letter-spacing: 0.1em;
+  transform: rotate(-6deg);
+  pointer-events: none;
+}
+
+.a4-declaration-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #065F46;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+
+.a4-declaration-text {
+  font-size: 0.80rem;
+  color: #044E39;
+  line-height: 1.5;
+}
+
+/* Totais */
+.a4-totals-card {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.a4-totals-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #64748B;
+}
+
+.a4-totals-row.discount {
+  color: #DC2626;
+  font-weight: 600;
+}
+
+.a4-totals-row strong {
+  color: #0F172A;
+}
+
+.a4-total-banner {
+  background-color: #2563EB;
+  color: #FFFFFF;
+  border-radius: 4px;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.native-a4-preview-sheet.recibo-mode .a4-total-banner {
+  background-color: #059669;
+}
+
+/* Observações */
+.a4-notes-box {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  font-size: 0.78rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.a4-notes-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #64748B;
+  margin-bottom: 4px;
+}
+
+/* Assinaturas */
+.a4-signatures-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: auto;
+  padding-top: 24px;
+  text-align: center;
+}
+
+.a4-signature-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  z-index: 10;
-  color: var(--text-muted);
-  font-size: 0.92rem;
-  font-weight: 500;
+  font-size: 0.78rem;
+  color: #475569;
 }
 
-.spinner-large {
-  width: 36px;
-  height: 36px;
-  border: 3.5px solid #E2E8F0;
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+.a4-signature-line {
+  width: 100%;
+  height: 1px;
+  background-color: #94A3B8;
+  margin-bottom: 6px;
 }
 
-body.mode-recibo .spinner-large {
-  border-top-color: #059669;
+.a4-footer {
+  border-top: 1px solid #E2E8F0;
+  margin-top: 24px;
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.70rem;
+  color: #94A3B8;
+}
+
+@media (max-width: 767px) {
+  .native-a4-preview-sheet {
+    padding: 24px 16px;
+    min-height: auto;
+  }
+
+  .a4-parties-grid,
+  .a4-bottom-grid,
+  .a4-signatures-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .a4-header {
+    flex-direction: column;
+  }
+
+  .a4-badge-box {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .a4-meta-list {
+    text-align: left;
+  }
+
+  .a4-table {
+    display: block;
+    overflow-x: auto;
+  }
 }
 
 /* Footer do Visualizador */

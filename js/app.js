@@ -150,12 +150,13 @@
     btnWhatsappShare: document.getElementById('btn-whatsapp-share'),
     btnWhatsappMobile: document.getElementById('btn-whatsapp-mobile'),
 
-    // Visualizador Nativo de PDF (In-App Preview)
+    // Visualizador Nativo de PDF (In-App Preview de Alta Fidelidade)
     nativePdfModal: document.getElementById('native-pdf-modal'),
-    nativePdfIframe: document.getElementById('native-pdf-iframe'),
-    nativePdfLoading: document.getElementById('native-pdf-loading'),
+    nativePdfBodyScroll: document.getElementById('native-pdf-body-scroll'),
+    nativePdfSheetContainer: document.getElementById('native-pdf-sheet-container'),
     nativePdfModalTitle: document.getElementById('native-pdf-modal-title'),
     nativePdfDocBadge: document.getElementById('native-pdf-doc-badge'),
+    btnOpenRawPdf: document.getElementById('btn-open-raw-pdf'),
     btnClosePdfModalX: document.getElementById('btn-close-pdf-modal-x'),
     btnPdfModalDiscard: document.getElementById('btn-pdf-modal-discard'),
     btnPdfModalApprove: document.getElementById('btn-pdf-modal-approve-download'),
@@ -2094,87 +2095,326 @@
   }
 
   // =========================================================================
-  // Módulo: Visualizador Nativo de PDF (In-App Preview, Conferência e Decisão)
+  // Módulo: Visualizador Nativo de PDF (Folha A4 de Alta Fidelidade & Decisão)
   // =========================================================================
   let activePreviewBlobUrl = null;
   let activePreviewDoc = null;
   let activePreviewFilename = '';
 
   /**
-   * Abre o PDF no visualizador nativo da ferramenta para conferência antes do download
+   * Escapa caracteres especiais HTML para renderização segura
+   */
+  function escapeHtml(text) {
+    if (text === null || text === undefined) return '';
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  /**
+   * Renderiza a Folha A4 com 100% de fidelidade visual, dados reais e formatação idêntica ao PDF
+   */
+  function renderA4PreviewHtml() {
+    const isOrcamento = state.docType === 'orcamento';
+    const totals = calculateTotals();
+    const docNum = state.docNumber ? `#${state.docNumber.trim()}` : '#001';
+    const dateFormatted = formatDateBR(state.docDate) || formatDateBR(new Date().toISOString().split('T')[0]);
+    const validityFormatted = state.docValidity ? formatDateBR(state.docValidity) : '15 dias';
+    const paymentMethod = state.paymentMethod || 'PIX';
+
+    const emitterName = escapeHtml(state.emitterName || 'Prestador não informado');
+    const emitterDoc = escapeHtml(state.emitterDoc || '');
+    const emitterPhone = escapeHtml(state.emitterPhone || '');
+    const emitterEmail = escapeHtml(state.emitterEmail || '');
+
+    const clientName = escapeHtml(state.clientName || 'Cliente não informado');
+    const clientDoc = escapeHtml(state.clientDoc || '');
+    const clientAddress = escapeHtml(state.clientAddress || '');
+
+    // Linhas da tabela de itens
+    let itemsRowsHtml = '';
+    state.items.forEach((item, index) => {
+      const qty = parseFloat(item.quantity) || 0;
+      const price = parseFloat(item.unitPrice) || 0;
+      const subtotal = qty * price;
+      const desc = escapeHtml(item.description || 'Item sem descrição');
+      itemsRowsHtml += `
+        <tr>
+          <td class="col-num">${index + 1}</td>
+          <td class="col-desc">${desc}</td>
+          <td class="col-qty">${qty}</td>
+          <td class="col-price">${formatCurrency(price)}</td>
+          <td class="col-total">${formatCurrency(subtotal)}</td>
+        </tr>
+      `;
+    });
+
+    // QR Code PIX
+    let qrDataUrl = null;
+    if (state.includePixQr && state.pixKey) {
+      const pixPayload = getCurrentDocumentPixPayload();
+      if (pixPayload) {
+        qrDataUrl = generateQrCodeDataUrl(pixPayload, 200);
+      }
+    }
+    if (!qrDataUrl) {
+      qrDataUrl = getPixQrCodeDataUrl();
+    }
+
+    // Bloco Esquerdo Inferior: PIX ou Declaração de Quitação
+    let bottomActionBoxHtml = '';
+    if (isOrcamento) {
+      bottomActionBoxHtml = `
+        <div class="a4-pix-card">
+          <div class="a4-pix-title">Dados para Pagamento (PIX)</div>
+          <div class="a4-pix-content">
+            ${qrDataUrl ? `<div class="a4-pix-qr"><img src="${qrDataUrl}" alt="QR Code PIX"></div>` : ''}
+            <div class="a4-pix-info">
+              <div><strong>Chave PIX:</strong> ${escapeHtml(state.pixKey || 'Consulte o emissor')}</div>
+              ${state.pixBank ? `<div><strong>Banco/Favorecido:</strong> ${escapeHtml(state.pixBank)}</div>` : ''}
+              <div style="font-size: 0.72rem; color: #64748B; margin-top: 4px;">Aponte a câmera do seu aplicativo de banco para pagar via PIX.</div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      const clientRef = state.clientName ? state.clientName.trim() : 'o cliente qualificado';
+      const docRef = state.clientDoc ? `, CPF/CNPJ ${state.clientDoc.trim()}` : '';
+      bottomActionBoxHtml = `
+        <div class="a4-recibo-declaration">
+          <div class="a4-declaration-tag">Declaração de Quitação Integral</div>
+          <div class="a4-declaration-text">
+            Declaramos para os devidos fins que RECEBEMOS de <strong>${escapeHtml(clientRef)}</strong>${escapeHtml(docRef)} a importância líquida de <strong>${formatCurrency(totals.total)}</strong> (${escapeHtml(paymentMethod)}), referente à quitação e liquidação dos serviços/produtos descritos neste comprovante, conferindo plena, geral e irrevogável quitação.
+          </div>
+        </div>
+      `;
+    }
+
+    // Bloco Direito Inferior: Totais
+    const discountRowHtml = totals.discount > 0 ? `
+      <div class="a4-totals-row discount">
+        <span>Desconto ${state.discountType === 'percent' ? `(${state.discount}%)` : ''}:</span>
+        <span>- ${formatCurrency(totals.discount)}</span>
+      </div>
+    ` : '';
+
+    const totalsBoxHtml = `
+      <div class="a4-totals-card">
+        <div class="a4-totals-row">
+          <span>Subtotal:</span>
+          <strong>${formatCurrency(totals.subtotal)}</strong>
+        </div>
+        ${discountRowHtml}
+        <div class="a4-total-banner">
+          <span>VALOR TOTAL:</span>
+          <span>${formatCurrency(totals.total)}</span>
+        </div>
+      </div>
+    `;
+
+    // Observações
+    let notesBoxHtml = '';
+    if (state.notes && state.notes.trim()) {
+      notesBoxHtml = `
+        <div class="a4-notes-box">
+          <div class="a4-notes-title">Observações & Condições Gerais</div>
+          <div>${escapeHtml(state.notes).replace(/\n/g, '<br>')}</div>
+        </div>
+      `;
+    }
+
+    // Assinaturas
+    let signaturesHtml = '';
+    if (isOrcamento) {
+      signaturesHtml = `
+        <div class="a4-signatures-row">
+          <div class="a4-signature-box">
+            <div class="a4-signature-line"></div>
+            <strong>Aceite do Cliente / De Acordo</strong>
+            <span style="font-size: 0.72rem; color: #94A3B8;">Data: ____ / ____ / ________</span>
+          </div>
+          <div class="a4-signature-box">
+            <div class="a4-signature-line"></div>
+            <strong>${emitterName}</strong>
+            <span style="font-size: 0.72rem; color: #94A3B8;">Prestador / Emissor</span>
+          </div>
+        </div>
+      `;
+    } else {
+      signaturesHtml = `
+        <div class="a4-signatures-row" style="grid-template-columns: 1fr; max-width: 360px; margin-left: auto; margin-right: auto;">
+          <div class="a4-signature-box">
+            <div class="a4-signature-line"></div>
+            <strong>${emitterName}</strong>
+            <span style="font-size: 0.72rem; color: #64748B;">Assinatura do Emissor • Comprovante de Quitação</span>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="native-a4-preview-sheet ${isOrcamento ? '' : 'recibo-mode'}">
+        <div class="a4-top-stripe"></div>
+
+        <!-- Cabeçalho Principal -->
+        <header class="a4-header">
+          <div>
+            <h2 class="a4-brand-name">${emitterName}</h2>
+            <div class="a4-brand-subtitle">${isOrcamento ? 'Proposta Comercial & Orçamento de Prestação de Serviços' : 'Comprovante Oficial de Pagamento e Quitação'}</div>
+          </div>
+          <div class="a4-badge-box">
+            <div class="a4-type-badge">${isOrcamento ? 'ORÇAMENTO' : 'RECIBO DE QUITAÇÃO'}</div>
+            <ul class="a4-meta-list">
+              <li><strong>Nº do Documento:</strong> ${docNum}</li>
+              <li><strong>${isOrcamento ? 'Data de Emissão' : 'Data do Pagamento'}:</strong> ${dateFormatted}</li>
+              ${isOrcamento ? `<li><strong>Validade da Proposta:</strong> ${validityFormatted}</li>` : `<li><strong>Forma de Pagamento:</strong> ${escapeHtml(paymentMethod)}</li>`}
+            </ul>
+          </div>
+        </header>
+
+        <div class="a4-divider"></div>
+
+        <!-- Partes: Emissor & Cliente -->
+        <div class="a4-parties-grid">
+          <div class="a4-party-card">
+            <div class="a4-party-tag">Prestador / Emissor</div>
+            <div class="a4-party-name">${emitterName}</div>
+            <div class="a4-party-details">
+              ${emitterDoc ? `<div><strong>CNPJ/CPF:</strong> ${emitterDoc}</div>` : ''}
+              ${emitterPhone ? `<div><strong>Telefone:</strong> ${emitterPhone}</div>` : ''}
+              ${emitterEmail ? `<div><strong>E-mail:</strong> ${emitterEmail}</div>` : ''}
+            </div>
+          </div>
+
+          <div class="a4-party-card">
+            <div class="a4-party-tag">Cliente / Destinatário</div>
+            <div class="a4-party-name">${clientName}</div>
+            <div class="a4-party-details">
+              ${clientDoc ? `<div><strong>Doc:</strong> ${clientDoc}</div>` : ''}
+              ${clientAddress ? `<div><strong>Endereço:</strong> ${clientAddress}</div>` : ''}
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela de Itens -->
+        <table class="a4-table">
+          <thead>
+            <tr>
+              <th class="col-num">#</th>
+              <th class="col-desc">Descrição do Item / Serviço</th>
+              <th class="col-qty">Qtd</th>
+              <th class="col-price">Valor Unit.</th>
+              <th class="col-total">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsRowsHtml}
+          </tbody>
+        </table>
+
+        <!-- Bloco Inferior: PIX / Quitação e Totais -->
+        <div class="a4-bottom-grid">
+          ${bottomActionBoxHtml}
+          ${totalsBoxHtml}
+        </div>
+
+        <!-- Observações -->
+        ${notesBoxHtml}
+
+        <!-- Assinaturas -->
+        ${signaturesHtml}
+
+        <!-- Rodapé Oficial -->
+        <footer class="a4-footer">
+          <span>Documento gerado através do <strong>PDFaz.com.br</strong></span>
+          <span>Página 1 de 1</span>
+        </footer>
+      </div>
+    `;
+  }
+
+  /**
+   * Abre o documento no visualizador nativo de alta fidelidade
    */
   function openNativePdfViewer() {
     try {
       setButtonLoading(dom.btnPreviewPdf, true);
       if (dom.btnPreviewPdfMobile) dom.btnPreviewPdfMobile.disabled = true;
 
-      // Exibe loading do visualizador se disponível
-      if (dom.nativePdfLoading) dom.nativePdfLoading.style.display = 'flex';
+      // 1. Renderiza a folha A4 realista diretamente na tela
+      const sheetHtml = renderA4PreviewHtml();
+      if (dom.nativePdfSheetContainer) {
+        dom.nativePdfSheetContainer.innerHTML = sheetHtml;
+      }
 
-      setTimeout(() => {
-        try {
-          // Constrói o documento e o nome do arquivo
-          activePreviewDoc = buildPdfDocument();
-          activePreviewFilename = buildDocumentFilename();
+      // 2. Constrói o documento PDF oficial em segundo plano para download
+      activePreviewDoc = buildPdfDocument();
+      activePreviewFilename = buildDocumentFilename();
 
-          // Libera blob anterior se existir
-          if (activePreviewBlobUrl) {
-            URL.revokeObjectURL(activePreviewBlobUrl);
-          }
+      // 3. Prepara o Blob URL caso o usuário queira abrir via "PDF Externo"
+      if (activePreviewBlobUrl) {
+        URL.revokeObjectURL(activePreviewBlobUrl);
+      }
+      const blob = activePreviewDoc.output('blob');
+      activePreviewBlobUrl = URL.createObjectURL(blob);
 
-          // Cria Blob PDF e URL de visualização
-          const blob = activePreviewDoc.output('blob');
-          activePreviewBlobUrl = URL.createObjectURL(blob);
+      // 4. Atualiza os títulos e badges do modal
+      const isRecibo = state.docType === 'recibo';
+      const docNum = (state.docNumber || '001').trim();
 
-          if (dom.nativePdfIframe) {
-            dom.nativePdfIframe.src = activePreviewBlobUrl;
-          }
+      if (dom.nativePdfModalTitle) {
+        dom.nativePdfModalTitle.textContent = isRecibo ? 'Pré-visualização do Recibo de Quitação' : 'Pré-visualização do Orçamento Comercial';
+      }
 
-          // Atualiza cabeçalho do visualizador nativo
-          const isRecibo = state.docType === 'recibo';
-          const docNum = (state.docNumber || '001').trim();
+      if (dom.nativePdfDocBadge) {
+        dom.nativePdfDocBadge.textContent = isRecibo ? `Recibo #${docNum}` : `Orçamento #${docNum}`;
+        dom.nativePdfDocBadge.className = `native-pdf-badge ${isRecibo ? 'recibo' : 'orcamento'}`;
+      }
 
-          if (dom.nativePdfModalTitle) {
-            dom.nativePdfModalTitle.textContent = isRecibo ? 'Pré-visualização do Recibo de Quitação' : 'Pré-visualização do Orçamento Comercial';
-          }
+      if (dom.btnPdfModalApproveText) {
+        dom.btnPdfModalApproveText.textContent = isRecibo ? 'Aprovar e Baixar Recibo' : 'Aprovar e Baixar Orçamento';
+      }
 
-          if (dom.nativePdfDocBadge) {
-            dom.nativePdfDocBadge.textContent = isRecibo ? `Recibo #${docNum}` : `Orçamento #${docNum}`;
-            dom.nativePdfDocBadge.className = `native-pdf-badge ${isRecibo ? 'recibo' : 'orcamento'}`;
-          }
+      // 5. Exibe o modal com rolagem no topo
+      if (dom.nativePdfModal) {
+        dom.nativePdfModal.classList.add('active');
+        dom.nativePdfModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
 
-          if (dom.btnPdfModalApproveText) {
-            dom.btnPdfModalApproveText.textContent = isRecibo ? 'Aprovar e Baixar Recibo' : 'Aprovar e Baixar Orçamento';
-          }
+      if (dom.nativePdfBodyScroll) {
+        dom.nativePdfBodyScroll.scrollTop = 0;
+      }
 
-          // Abre o modal nativo
-          if (dom.nativePdfModal) {
-            dom.nativePdfModal.classList.add('active');
-            dom.nativePdfModal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-          }
-
-          if (dom.nativePdfLoading) {
-            setTimeout(() => {
-              dom.nativePdfLoading.style.display = 'none';
-            }, 300);
-          }
-
-          showToast('Visualizador nativo aberto. Confira o documento.', 'info');
-        } catch (err) {
-          console.error(err);
-          showToast(`Erro na pré-visualização: ${err.message}`, 'danger');
-          if (dom.nativePdfLoading) dom.nativePdfLoading.style.display = 'none';
-        } finally {
-          setButtonLoading(dom.btnPreviewPdf, false);
-          if (dom.btnPreviewPdfMobile) dom.btnPreviewPdfMobile.disabled = false;
-        }
-      }, 100);
-    } catch (e) {
-      console.error(e);
+      showToast('Visualizador nativo aberto. Confira o documento.', 'info');
+    } catch (err) {
+      console.error(err);
+      showToast(`Erro na pré-visualização: ${err.message}`, 'danger');
+    } finally {
       setButtonLoading(dom.btnPreviewPdf, false);
       if (dom.btnPreviewPdfMobile) dom.btnPreviewPdfMobile.disabled = false;
-      if (dom.nativePdfLoading) dom.nativePdfLoading.style.display = 'none';
+    }
+  }
+
+  /**
+   * Abre o arquivo PDF bruto em nova aba para visualização direta pelo navegador
+   */
+  function openRawPdfExternal() {
+    try {
+      if (!activePreviewBlobUrl && activePreviewDoc) {
+        const blob = activePreviewDoc.output('blob');
+        activePreviewBlobUrl = URL.createObjectURL(blob);
+      }
+      if (activePreviewBlobUrl) {
+        window.open(activePreviewBlobUrl, '_blank');
+        showToast('Abrindo PDF original em nova aba...', 'info');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast('Não foi possível abrir em nova aba.', 'warning');
     }
   }
 
@@ -2187,10 +2427,6 @@
     dom.nativePdfModal.classList.remove('active');
     dom.nativePdfModal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
-
-    if (dom.nativePdfIframe) {
-      dom.nativePdfIframe.src = 'about:blank';
-    }
 
     if (activePreviewBlobUrl) {
       URL.revokeObjectURL(activePreviewBlobUrl);
@@ -2413,6 +2649,9 @@
     }
 
     // Ações do Modal de Visualização Nativa
+    if (dom.btnOpenRawPdf) {
+      dom.btnOpenRawPdf.addEventListener('click', openRawPdfExternal);
+    }
     if (dom.btnClosePdfModalX) {
       dom.btnClosePdfModalX.addEventListener('click', () => closeNativePdfViewer(true));
     }
