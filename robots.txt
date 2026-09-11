@@ -1,0 +1,7 @@
+# robots.txt para https://www.pdfaz.com.br/
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://www.pdfaz.com.br/sitemap.xml
+Sitemap: https://pdfaz.com.br/sitemap.xml
