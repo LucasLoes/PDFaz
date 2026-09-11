@@ -140,30 +140,61 @@
           </span>
         </div>
 
-        <!-- Alternador Orçamento / Recibo -->
-        <div class="doc-type-selector" role="tablist">
-          <button type="button" id="btn-type-orcamento" class="doc-type-btn active" role="tab" aria-selected="true">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-            </svg>
-            Orçamento Comercial
+        <!-- Alternador Orçamento / Recibo com Super Cards de Decisão -->
+        <div class="doc-type-cards-grid" role="tablist">
+          <button type="button" id="btn-type-orcamento" class="doc-type-card-btn active" role="tab" aria-selected="true">
+            <div class="doc-card-icon-wrapper orcamento">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+            </div>
+            <div class="doc-card-content">
+              <div class="doc-card-title-row">
+                <span class="doc-card-title">Orçamento Comercial</span>
+                <span class="doc-card-badge orcamento">Proposta</span>
+              </div>
+              <span class="doc-card-desc">Negociação, validade, condições e QR Code para pagamento</span>
+            </div>
+            <div class="doc-card-check">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
           </button>
-          <button type="button" id="btn-type-recibo" class="doc-type-btn" role="tab" aria-selected="false">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="9 11 12 14 22 4"></polyline>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-            </svg>
-            Recibo de Quitação
+
+          <button type="button" id="btn-type-recibo" class="doc-type-card-btn" role="tab" aria-selected="false">
+            <div class="doc-card-icon-wrapper recibo">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <polyline points="9 12 11 14 15 10"></polyline>
+              </svg>
+            </div>
+            <div class="doc-card-content">
+              <div class="doc-card-title-row">
+                <span class="doc-card-title">Recibo de Quitação</span>
+                <span class="doc-card-badge recibo">PAGO • Quitado</span>
+              </div>
+              <span class="doc-card-desc">Comprovante de pagamento com fé pública e quitação</span>
+            </div>
+            <div class="doc-card-check">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
           </button>
         </div>
 
         <div class="form-grid form-grid-3">
           <div class="form-group">
-            <label for="doc-number" class="form-label">Número do Documento</label>
-            <input type="text" id="doc-number" class="form-input" placeholder="Ex: 001 ou 2026-01" value="001">
+            <label for="doc-number" class="form-label">
+              <span>Número do Documento</span>
+              <span class="optional">Sequencial</span>
+            </label>
+            <div class="input-with-button">
+              <input type="text" id="doc-number" class="form-input" placeholder="Ex: 001 ou 2026-01" value="001">
+              <button type="button" id="btn-increment-doc" class="btn btn-outline btn-increment" title="Avançar para o próximo número (+1)">
+                <span>+1</span>
+              </button>
+            </div>
           </div>
 
           <div class="form-group">
@@ -209,16 +240,17 @@
       <!-- CARD 2: Dados do Emissor (Prestador) e do Cliente -->
       <div class="form-grid form-grid-2">
         
-        <!-- Emissor (Você) -->
-        <div class="card">
+        <!-- Emissor (DE) -->
+        <div class="card card-party card-emitter">
           <div class="card-header">
             <h2 class="card-title">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
-              Dados do Emissor (Você)
+              <span>Dados do Emissor</span>
             </h2>
+            <span class="party-role-badge emitter-badge">DE • Prestador</span>
           </div>
           <div class="form-grid">
             <div class="form-group">
@@ -242,8 +274,8 @@
           </div>
         </div>
 
-        <!-- Cliente (Tomador) -->
-        <div class="card">
+        <!-- Cliente (PARA) -->
+        <div class="card card-party card-client">
           <div class="card-header">
             <h2 class="card-title">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -252,8 +284,9 @@
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
               </svg>
-              Dados do Cliente (Tomador)
+              <span>Dados do Cliente</span>
             </h2>
+            <span class="party-role-badge client-badge">PARA • Tomador</span>
           </div>
           <div class="form-grid">
             <div class="form-group">
@@ -290,58 +323,69 @@
         </div>
 
         <div class="items-table-wrapper">
-          <!-- Cabeçalho (visível em telas médias e grandes) -->
+          <!-- Cabeçalho (Modern Invoice Grid) -->
           <div class="items-header">
-            <span>Descrição do Item / Serviço</span>
-            <span style="text-align: center;">Qtd</span>
-            <span>Valor Unit. (R$)</span>
-            <span style="text-align: right;">Total</span>
-            <span style="text-align: center;">Ação</span>
+            <span class="col-header-num">#</span>
+            <span class="col-header-desc">Descrição do Item / Serviço</span>
+            <span class="col-header-qty">Quantidade</span>
+            <span class="col-header-price">Preço Unitário (R$)</span>
+            <span class="col-header-total">Subtotal</span>
+            <span class="col-header-action">Ação</span>
           </div>
 
-          <!-- Linhas dinâmicas -->
-          <div id="items-list" class="items-list">
-            <!-- Gerado via JavaScript -->
-          </div>
+          <!-- Linhas dinâmicas geradas via JavaScript -->
+          <div id="items-list" class="items-list"></div>
         </div>
 
-        <!-- Botão Adicionar Item -->
+        <!-- Botão Adicionar Item com Dica de Atalho -->
         <div class="add-item-action">
-          <button type="button" id="btn-add-item" class="btn btn-outline">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" id="btn-add-item" class="btn btn-outline btn-add-item-modern">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            Adicionar Item
+            <span>Adicionar Novo Item</span>
           </button>
+          <span class="add-item-hint">Dica: Pressione <strong>Enter</strong> no preço unitário para adicionar rapidamente</span>
         </div>
 
-        <!-- Resumo Financeiro / Totais -->
+        <!-- Resumo Financeiro / Totais Executivo -->
         <div class="summary-container">
           <div class="summary-line">
-            <span>Subtotal:</span>
-            <span id="subtotal-display">R$ 0,00</span>
+            <span class="summary-label">Subtotal dos Itens:</span>
+            <span id="subtotal-display" class="summary-value">R$ 0,00</span>
           </div>
 
           <div class="summary-line discount-input-line">
-            <span>Desconto (R$):</span>
+            <div class="discount-label-col">
+              <span class="summary-label">Desconto:</span>
+              <div class="discount-type-toggle" role="radiogroup" aria-label="Tipo de Desconto">
+                <button type="button" class="discount-toggle-btn active" id="btn-discount-currency" title="Desconto em Reais (R$)">R$</button>
+                <button type="button" class="discount-toggle-btn" id="btn-discount-percent" title="Desconto em Porcentagem (%)">%</button>
+              </div>
+            </div>
             <div class="discount-input-wrapper">
-              <input 
-                type="number" 
-                id="input-discount" 
-                class="form-input" 
-                min="0" 
-                step="0.01" 
-                placeholder="0,00"
-                style="padding: 6px 10px; min-height: 36px; text-align: right;"
-              >
+              <div class="input-prefix-wrapper discount-field">
+                <span class="input-prefix" id="discount-symbol">R$</span>
+                <input 
+                  type="number" 
+                  id="input-discount" 
+                  class="form-input" 
+                  min="0" 
+                  step="0.01" 
+                  placeholder="0,00"
+                >
+              </div>
             </div>
           </div>
 
           <div class="summary-divider"></div>
 
-          <div class="summary-total">
-            <span>TOTAL:</span>
+          <div class="summary-total-box">
+            <div class="total-info-col">
+              <span class="total-caption" id="total-caption-text">VALOR TOTAL DO ORÇAMENTO</span>
+              <span class="total-status-pill" id="total-status-pill">Proposta Aberta</span>
+            </div>
             <span class="total-value" id="total-display">R$ 0,00</span>
           </div>
         </div>
@@ -459,8 +503,27 @@
         </div>
       </div>
 
-      <!-- Ações Principais (Desktop) -->
+      <!-- Ações Principais (Desktop) com Centro de Produtividade -->
       <div class="desktop-action-bar">
+        <!-- Ação 1: Converter Documento em 1 clique -->
+        <button type="button" id="btn-convert-mode" class="btn btn-outline btn-lg btn-convert-doc" title="Converter este documento mantendo todos os dados">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          <span id="btn-convert-text">Transformar em Recibo</span>
+        </button>
+
+        <!-- Ação 2: Compartilhar Resumo no WhatsApp -->
+        <button type="button" id="btn-whatsapp-share" class="btn btn-whatsapp btn-lg" title="Compartilhar resumo pré-formatado no WhatsApp">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+          </svg>
+          <span>WhatsApp</span>
+        </button>
+
+        <!-- Ação 3: Visualizar PDF -->
         <button type="button" id="btn-preview-pdf" class="btn btn-outline btn-lg">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -469,6 +532,7 @@
           <span id="btn-preview-text">Visualizar Orçamento</span>
         </button>
 
+        <!-- Ação 4: Baixar PDF -->
         <button type="button" id="btn-generate-pdf" class="btn btn-success btn-lg">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -654,17 +718,24 @@
        ======================================================================== -->
   <aside class="mobile-action-bar" aria-label="Ação rápida de geração de PDF">
     <div class="mobile-total-info">
-      <span class="label">Total Geral</span>
+      <span class="label" id="mobile-total-label">Total Geral</span>
       <span class="value" id="mobile-total-display">R$ 0,00</span>
     </div>
-    <button type="button" id="btn-generate-pdf-mobile" class="btn btn-success btn-generate-mobile">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        <polyline points="7 10 12 15 17 10"></polyline>
-        <line x1="12" y1="15" x2="12" y2="3"></line>
-      </svg>
-      <span id="btn-generate-mobile-text">Baixar Orçamento</span>
-    </button>
+    <div class="mobile-action-buttons">
+      <button type="button" id="btn-whatsapp-mobile" class="btn btn-whatsapp btn-sm btn-icon-only" title="Compartilhar no WhatsApp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+        </svg>
+      </button>
+      <button type="button" id="btn-generate-pdf-mobile" class="btn btn-success btn-generate-mobile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span id="btn-generate-mobile-text">Baixar Orçamento</span>
+      </button>
+    </div>
   </aside>
 
   <!-- ========================================================================

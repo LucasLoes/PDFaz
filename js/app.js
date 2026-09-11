@@ -36,6 +36,7 @@
 
     // Financeiro
     discount: 0,
+    discountType: 'currency', // 'currency' (R$) ou 'percent' (%)
 
     // Dados de PIX e Pagamento
     pixKey: '45.123.789/0001-90',
@@ -134,7 +135,20 @@
     surveyFeatureSuggestion: document.getElementById('survey-feature-suggestion'),
     surveySuccessCard: document.getElementById('survey-success-card'),
     surveyBtnCloseSuccess: document.getElementById('survey-btn-close-success'),
-    btnOpenSurvey: document.getElementById('btn-open-survey')
+    btnOpenSurvey: document.getElementById('btn-open-survey'),
+
+    // Produtividade & Controles de Layout
+    btnIncrementDoc: document.getElementById('btn-increment-doc'),
+    btnDiscountCurrency: document.getElementById('btn-discount-currency'),
+    btnDiscountPercent: document.getElementById('btn-discount-percent'),
+    discountSymbol: document.getElementById('discount-symbol'),
+    totalCaptionText: document.getElementById('total-caption-text'),
+    totalStatusPill: document.getElementById('total-status-pill'),
+    mobileTotalLabel: document.getElementById('mobile-total-label'),
+    btnConvertMode: document.getElementById('btn-convert-mode'),
+    btnConvertText: document.getElementById('btn-convert-text'),
+    btnWhatsappShare: document.getElementById('btn-whatsapp-share'),
+    btnWhatsappMobile: document.getElementById('btn-whatsapp-mobile')
   };
 
   // Instâncias do gerador QRCode.js
@@ -207,7 +221,7 @@
   // =========================================================================
 
   /**
-   * Recalcula Subtotal, Desconto e Total Geral
+   * Recalcula Subtotal, Desconto (Moeda ou Porcentagem) e Total Geral
    */
   function calculateTotals() {
     let subtotal = 0;
@@ -219,7 +233,15 @@
       subtotal += itemTotal;
     });
 
-    const discountVal = parseFloat(state.discount) || 0;
+    const rawDiscount = parseFloat(state.discount) || 0;
+    let discountVal = 0;
+
+    if (state.discountType === 'percent') {
+      discountVal = (subtotal * Math.min(100, Math.max(0, rawDiscount))) / 100;
+    } else {
+      discountVal = Math.min(subtotal, Math.max(0, rawDiscount));
+    }
+
     const total = Math.max(0, subtotal - discountVal);
 
     // Atualiza exibições
@@ -230,7 +252,7 @@
     // Atualiza texto da declaração se o modo recibo estiver ativo
     updateReciboDeclaration(total);
 
-    return { subtotal, discount: discountVal, total };
+    return { subtotal, discount: discountVal, total, rawDiscount, discountType: state.discountType };
   }
 
   /**
@@ -250,7 +272,7 @@
   }
 
   /**
-   * Renderiza a lista de itens no DOM
+   * Renderiza a lista de itens no DOM com Modern Invoice Grid
    */
   function renderItems() {
     if (!dom.itemsList) return;
@@ -266,7 +288,10 @@
       const totalItem = qty * price;
 
       row.innerHTML = `
-        <!-- Descrição -->
+        <!-- Badge Numérico -->
+        <span class="item-num-badge">#${index + 1}</span>
+
+        <!-- Descrição do Item -->
         <div class="form-group" style="margin-bottom: 0;">
           <span class="mobile-label">Descrição do Item #${index + 1}</span>
           <input 
@@ -280,54 +305,62 @@
 
         <!-- Mobile Grid / Desktop Direct Columns -->
         <div class="item-row-grid-mobile">
-          <!-- Quantidade -->
+          <!-- Quantidade com Stepper -->
           <div class="form-group" style="margin-bottom: 0;">
-            <span class="mobile-label">Qtd</span>
-            <input 
-              type="number" 
-              class="form-input item-qty-input" 
-              min="1" 
-              step="1" 
-              value="${item.quantity}"
-              data-field="quantity"
-            />
+            <span class="mobile-label">Quantidade</span>
+            <div class="qty-stepper">
+              <button type="button" class="qty-btn btn-qty-minus" aria-label="Diminuir quantidade">−</button>
+              <input 
+                type="number" 
+                class="qty-input item-qty-input" 
+                min="1" 
+                step="1" 
+                value="${item.quantity}"
+                data-field="quantity"
+              />
+              <button type="button" class="qty-btn btn-qty-plus" aria-label="Aumentar quantidade">+</button>
+            </div>
           </div>
 
-          <!-- Preço Unitário -->
+          <!-- Preço Unitário com Prefixo R$ -->
           <div class="form-group" style="margin-bottom: 0;">
-            <span class="mobile-label">Valor Unit. (R$)</span>
-            <input 
-              type="number" 
-              class="form-input item-price-input" 
-              min="0" 
-              step="0.01" 
-              placeholder="0,00"
-              value="${item.unitPrice !== undefined ? item.unitPrice : ''}"
-              data-field="unitPrice"
-            />
+            <span class="mobile-label">Preço Unitário (R$)</span>
+            <div class="item-price-wrapper">
+              <span class="currency-symbol">R$</span>
+              <input 
+                type="number" 
+                class="form-input item-price-input" 
+                min="0" 
+                step="0.01" 
+                placeholder="0,00"
+                value="${item.unitPrice !== undefined && item.unitPrice !== '' ? item.unitPrice : ''}"
+                data-field="unitPrice"
+              />
+            </div>
           </div>
 
-          <!-- Total do Item -->
-          <div class="item-total-display">
-            <span class="mobile-label">Total</span>
-            <span class="item-row-total">${formatCurrency(totalItem)}</span>
-          </div>
+          <div class="item-row-total-container-mobile">
+            <!-- Chip de Subtotal da Linha -->
+            <div class="item-row-total-chip">
+              <span class="item-row-total">${formatCurrency(totalItem)}</span>
+            </div>
 
-          <!-- Botão Excluir -->
-          <button 
-            type="button" 
-            class="btn-delete-item" 
-            title="Excluir Item" 
-            aria-label="Excluir item ${index + 1}"
-            ${state.items.length <= 1 ? 'disabled style="opacity: 0.3; cursor: not-allowed;"' : ''}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              <line x1="10" y1="11" x2="10" y2="17"></line>
-              <line x1="14" y1="11" x2="14" y2="17"></line>
-            </svg>
-          </button>
+            <!-- Botão Excluir -->
+            <button 
+              type="button" 
+              class="btn-delete-item" 
+              title="Excluir Item" 
+              aria-label="Excluir item ${index + 1}"
+              ${state.items.length <= 1 ? 'disabled style="opacity: 0.3; cursor: not-allowed;"' : ''}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+            </button>
+          </div>
         </div>
       `;
 
@@ -337,11 +370,13 @@
       const priceInput = row.querySelector('.item-price-input');
       const deleteBtn = row.querySelector('.btn-delete-item');
       const itemRowTotal = row.querySelector('.item-row-total');
+      const btnMinus = row.querySelector('.btn-qty-minus');
+      const btnPlus = row.querySelector('.btn-qty-plus');
 
       const updateRow = () => {
         item.description = descInput.value;
-        item.quantity = parseFloat(qtyInput.value) || 0;
-        item.unitPrice = parseFloat(priceInput.value) || 0;
+        item.quantity = Math.max(1, parseFloat(qtyInput.value) || 1);
+        item.unitPrice = Math.max(0, parseFloat(priceInput.value) || 0);
         itemRowTotal.textContent = formatCurrency(item.quantity * item.unitPrice);
         calculateTotals();
         updatePixQrCode();
@@ -352,16 +387,45 @@
       qtyInput.addEventListener('input', updateRow);
       priceInput.addEventListener('input', updateRow);
 
-      deleteBtn.addEventListener('click', () => {
-        if (state.items.length > 1) {
-          state.items = state.items.filter(i => i.id !== item.id);
-          renderItems();
-          calculateTotals();
-          updatePixQrCode();
-          saveToLocalStorage();
-          showToast('Item removido.', 'info');
+      // Atalho tecla Enter no preço para adicionar novo item
+      priceInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addNewItem();
         }
       });
+
+      // Steppers de Quantidade (+ e -)
+      if (btnMinus) {
+        btnMinus.addEventListener('click', () => {
+          let cur = Math.max(1, (parseFloat(qtyInput.value) || 1) - 1);
+          qtyInput.value = cur;
+          updateRow();
+        });
+      }
+      if (btnPlus) {
+        btnPlus.addEventListener('click', () => {
+          let cur = (parseFloat(qtyInput.value) || 1) + 1;
+          qtyInput.value = cur;
+          updateRow();
+        });
+      }
+
+      // Exclusão com animação suave
+      if (deleteBtn && state.items.length > 1) {
+        deleteBtn.addEventListener('click', () => {
+          row.style.opacity = '0';
+          row.style.transform = 'translateX(20px)';
+          setTimeout(() => {
+            state.items = state.items.filter(i => i.id !== item.id);
+            renderItems();
+            calculateTotals();
+            updatePixQrCode();
+            saveToLocalStorage();
+            showToast('Item removido.', 'info');
+          }, 150);
+        });
+      }
 
       dom.itemsList.appendChild(row);
     });
@@ -913,7 +977,7 @@
   }
 
   // =========================================================================
-  // Alternância de Tipo de Documento (Orçamento vs Recibo)
+  // Alternância de Tipo de Documento (Orçamento vs Recibo) & Produtividade
   // =========================================================================
 
   function setDocType(type) {
@@ -931,8 +995,14 @@
     const dateLabel = document.getElementById('doc-date-label');
 
     if (type === 'orcamento') {
-      if (btnTypeOrc) btnTypeOrc.classList.add('active');
-      if (btnTypeRec) btnTypeRec.classList.remove('active');
+      if (btnTypeOrc) {
+        btnTypeOrc.classList.add('active');
+        btnTypeOrc.setAttribute('aria-selected', 'true');
+      }
+      if (btnTypeRec) {
+        btnTypeRec.classList.remove('active');
+        btnTypeRec.setAttribute('aria-selected', 'false');
+      }
 
       if (orcFields) orcFields.style.display = 'block';
       if (recFields) recFields.style.display = 'none';
@@ -941,16 +1011,31 @@
       if (badgeText) badgeText.textContent = 'Orçamento Comercial';
       if (dateLabel) dateLabel.textContent = 'Data de Emissão';
 
+      if (dom.totalCaptionText) dom.totalCaptionText.textContent = 'VALOR TOTAL DO ORÇAMENTO';
+      if (dom.totalStatusPill) {
+        dom.totalStatusPill.textContent = 'Proposta Aberta';
+        dom.totalStatusPill.style.backgroundColor = '#DBEAFE';
+        dom.totalStatusPill.style.color = '#1D4ED8';
+      }
+      if (dom.mobileTotalLabel) dom.mobileTotalLabel.textContent = 'Total Orçamento';
+      if (dom.btnConvertText) dom.btnConvertText.textContent = 'Transformar em Recibo';
+
       document.body.classList.remove('mode-recibo');
 
-      // Ao alternar para Orçamento Comercial, marca automaticamente a inclusão do QR Code PIX
+      // Ao alternar para Orçamento Comercial, sugere inclusão do QR Code PIX para cobrança
       if (dom.includePixQrCheckbox) {
         dom.includePixQrCheckbox.checked = true;
         state.includePixQr = true;
       }
     } else {
-      if (btnTypeRec) btnTypeRec.classList.add('active');
-      if (btnTypeOrc) btnTypeOrc.classList.remove('active');
+      if (btnTypeRec) {
+        btnTypeRec.classList.add('active');
+        btnTypeRec.setAttribute('aria-selected', 'true');
+      }
+      if (btnTypeOrc) {
+        btnTypeOrc.classList.remove('active');
+        btnTypeOrc.setAttribute('aria-selected', 'false');
+      }
 
       if (orcFields) orcFields.style.display = 'none';
       if (recFields) recFields.style.display = 'block';
@@ -959,10 +1044,19 @@
       if (badgeText) badgeText.textContent = 'Recibo de Quitação • PAGO';
       if (dateLabel) dateLabel.textContent = 'Data do Pagamento';
 
+      if (dom.totalCaptionText) dom.totalCaptionText.textContent = 'VALOR TOTAL QUITADO';
+      if (dom.totalStatusPill) {
+        dom.totalStatusPill.textContent = 'PAGO • Quitado';
+        dom.totalStatusPill.style.backgroundColor = '#D1FAE5';
+        dom.totalStatusPill.style.color = '#065F46';
+      }
+      if (dom.mobileTotalLabel) dom.mobileTotalLabel.textContent = 'Total Quitado';
+      if (dom.btnConvertText) dom.btnConvertText.textContent = 'Transformar em Orçamento';
+
       document.body.classList.add('mode-recibo');
       updateReciboDeclaration();
 
-      // Ao alternar para Recibo de Quitação, desmarca automaticamente a inclusão do QR Code PIX
+      // No Recibo, o pagamento já ocorreu
       if (dom.includePixQrCheckbox) {
         dom.includePixQrCheckbox.checked = false;
         state.includePixQr = false;
@@ -970,6 +1064,121 @@
     }
 
     saveToLocalStorage();
+  }
+
+  /**
+   * Converte instantaneamente o documento atual em 1 clique mantendo dados
+   */
+  function convertDocType() {
+    if (state.docType === 'orcamento') {
+      setDocType('recibo');
+      showToast('🎉 Orçamento convertido com sucesso para Recibo de Quitação!', 'success');
+    } else {
+      setDocType('orcamento');
+      showToast('📄 Recibo convertido com sucesso para Orçamento Comercial!', 'info');
+    }
+  }
+
+  /**
+   * Avança para o próximo número de documento (+1)
+   */
+  function incrementDocNumber() {
+    const cur = (dom.docNumber ? dom.docNumber.value : state.docNumber || '001').trim();
+    const match = cur.match(/^(.*?)(\d+)$/);
+    if (match) {
+      const prefix = match[1];
+      const digits = match[2];
+      const nextNum = parseInt(digits, 10) + 1;
+      const padded = String(nextNum).padStart(digits.length, '0');
+      const result = prefix + padded;
+      if (dom.docNumber) dom.docNumber.value = result;
+      state.docNumber = result;
+      saveToLocalStorage();
+      showToast(`Número avançado para "${result}"`, 'info');
+    } else {
+      const result = cur + '-01';
+      if (dom.docNumber) dom.docNumber.value = result;
+      state.docNumber = result;
+      saveToLocalStorage();
+      showToast(`Número atualizado para "${result}"`, 'info');
+    }
+    updatePixQrCode();
+  }
+
+  /**
+   * Alterna tipo de desconto entre moeda (R$) e porcentagem (%)
+   */
+  function setDiscountType(type) {
+    state.discountType = type;
+    if (dom.btnDiscountCurrency && dom.btnDiscountPercent) {
+      if (type === 'currency') {
+        dom.btnDiscountCurrency.classList.add('active');
+        dom.btnDiscountPercent.classList.remove('active');
+        if (dom.discountSymbol) dom.discountSymbol.textContent = 'R$';
+        if (dom.inputDiscount) {
+          dom.inputDiscount.placeholder = '0,00';
+          dom.inputDiscount.removeAttribute('max');
+        }
+      } else {
+        dom.btnDiscountPercent.classList.add('active');
+        dom.btnDiscountCurrency.classList.remove('active');
+        if (dom.discountSymbol) dom.discountSymbol.textContent = '%';
+        if (dom.inputDiscount) {
+          dom.inputDiscount.placeholder = '0%';
+          dom.inputDiscount.setAttribute('max', '100');
+        }
+      }
+    }
+    calculateTotals();
+    updatePixQrCode();
+    saveToLocalStorage();
+  }
+
+  /**
+   * Compartilha o resumo do documento com 1 clique no WhatsApp
+   */
+  function shareOnWhatsApp() {
+    const isRecibo = state.docType === 'recibo';
+    const docTitle = isRecibo ? 'Recibo de Quitação' : 'Orçamento Comercial';
+    const totals = calculateTotals();
+    const docNum = state.docNumber || '001';
+    const client = (state.clientName || '').trim() || 'Cliente';
+    const emitter = (state.emitterName || '').trim() || 'Emissor';
+    const pixKey = (state.pixKey || '').trim();
+
+    let text = `*${docTitle} #${docNum} • PDFaz*\n\n`;
+    text += `Olá, *${client}*!\n\n`;
+    if (isRecibo) {
+      text += `Confirmamos a quitação do pagamento referente aos serviços/produtos prestados por *${emitter}*.\n`;
+    } else {
+      text += `Segue a proposta comercial emitida por *${emitter}*:\n`;
+    }
+
+    text += `\n*Resumo dos Itens:*\n`;
+    state.items.forEach((item) => {
+      if (item.description) {
+        text += `• ${item.quantity}x ${item.description} - ${formatCurrency(item.quantity * item.unitPrice)}\n`;
+      }
+    });
+
+    if (totals.discount > 0) {
+      const discText = state.discountType === 'percent' ? `(${state.discount}%)` : '';
+      text += `\n*Desconto ${discText}:* -${formatCurrency(totals.discount)}\n`;
+    }
+
+    text += `\n*VALOR TOTAL:* *${formatCurrency(totals.total)}*\n`;
+
+    if (!isRecibo && pixKey) {
+      text += `\n*Chave PIX para pagamento:* \`${pixKey}\`\n`;
+    }
+
+    text += `\n_Documento oficial gerado através do PDFaz.com.br_`;
+
+    const encoded = encodeURIComponent(text);
+    const url = `https://api.whatsapp.com/send?text=${encoded}`;
+
+    window.open(url, '_blank');
+    showToast('Abrindo WhatsApp com o resumo pré-formatado...', 'success');
   }
 
   // =========================================================================
@@ -1014,9 +1223,10 @@
 
       const parsed = JSON.parse(saved);
       Object.assign(state, parsed);
+      state.discountType = parsed.discountType || 'currency';
 
       // Preenche os inputs com os dados recuperados
-      if (dom.docNumber) dom.docNumber.value = state.docNumber || '';
+      if (dom.docNumber) dom.docNumber.value = state.docNumber || '001';
       if (dom.docDate) dom.docDate.value = state.docDate || new Date().toISOString().split('T')[0];
       if (dom.docValidity) dom.docValidity.value = state.docValidity || '';
       if (dom.paymentMethod) dom.paymentMethod.value = state.paymentMethod || 'PIX';
@@ -1037,6 +1247,7 @@
       if (dom.pixBankInput) dom.pixBankInput.value = state.pixBank || '';
       if (dom.includePixQrCheckbox) dom.includePixQrCheckbox.checked = state.includePixQr !== false;
 
+      setDiscountType(state.discountType || 'currency');
       setDocType(state.docType || 'orcamento');
       renderItems();
       updatePixQrCode();
@@ -1392,7 +1603,8 @@
         totY += 6;
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(100, 116, 139);
-        doc.text('Desconto:', totalsX + 4, totY);
+        const discLabel = state.discountType === 'percent' ? `Desconto (${state.discount}%):` : 'Desconto:';
+        doc.text(discLabel, totalsX + 4, totY);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(239, 68, 68);
         doc.text(`- ${formatCurrency(totals.discount)}`, totalsX + totalsWidth - 4, totY, { align: 'right' });
@@ -1712,7 +1924,8 @@
         totY2 += 6;
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(100, 116, 139);
-        doc.text('Desconto:', totalsX + 4, totY2);
+        const discLabelRec = state.discountType === 'percent' ? `Desconto (${state.discount}%):` : 'Desconto:';
+        doc.text(discLabelRec, totalsX + 4, totY2);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(239, 68, 68);
         doc.text(`- ${formatCurrency(totals.discount)}`, totalsX + totalsWidth - 4, totY2, { align: 'right' });
@@ -1926,6 +2139,32 @@
         e.preventDefault();
         setDocType('recibo');
       });
+    }
+
+    // Botão de Incremento do Número (+1)
+    if (dom.btnIncrementDoc) {
+      dom.btnIncrementDoc.addEventListener('click', incrementDocNumber);
+    }
+
+    // Alternador de Desconto (R$ / %)
+    if (dom.btnDiscountCurrency) {
+      dom.btnDiscountCurrency.addEventListener('click', () => setDiscountType('currency'));
+    }
+    if (dom.btnDiscountPercent) {
+      dom.btnDiscountPercent.addEventListener('click', () => setDiscountType('percent'));
+    }
+
+    // Botão de Conversão em 1 Clique (Orçamento <-> Recibo)
+    if (dom.btnConvertMode) {
+      dom.btnConvertMode.addEventListener('click', convertDocType);
+    }
+
+    // Compartilhamento no WhatsApp
+    if (dom.btnWhatsappShare) {
+      dom.btnWhatsappShare.addEventListener('click', shareOnWhatsApp);
+    }
+    if (dom.btnWhatsappMobile) {
+      dom.btnWhatsappMobile.addEventListener('click', shareOnWhatsApp);
     }
 
     // Adicionar Item
