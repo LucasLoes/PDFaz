@@ -2191,7 +2191,7 @@
     }
 
     try {
-      const response = await fetch('https://formsubmit.co/ajax/lucasladeiraloes@gmail.com', {
+      const response = await fetch('/api/feedback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -2200,10 +2200,14 @@
         body: JSON.stringify(payload)
       });
 
-      const data = await response.json();
-      console.log('[Feedback] Enviado com sucesso via FormSubmit:', data);
+      if (response.ok) {
+        const data = await response.json().catch(() => ({}));
+        console.log('[Feedback] Enviado com sucesso para /api/feedback:', data);
+      } else {
+        console.warn('[Feedback] Servidor respondeu com status:', response.status);
+      }
     } catch (networkError) {
-      console.warn('[Feedback] FormSubmit offline ou bloqueado, salvo em LocalStorage:', networkError);
+      console.warn('[Feedback] Requisição falhou (salvo em LocalStorage):', networkError);
     } finally {
       localStorage.setItem('pdfaz_survey_done', 'true');
 
