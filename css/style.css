@@ -1133,14 +1133,14 @@ body.mode-recibo .summary-total-box .total-value {
   }
 }
 
-/* Ações Desktop no final do formulário (Centro Executivo) */
+/* Ações Desktop no final do formulário (Centro Executivo & Disposição Otimizada) */
 .desktop-action-bar {
   display: none;
   align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 24px;
-  padding-top: 18px;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 26px;
+  padding-top: 20px;
   border-top: 1px dashed var(--border-color);
   flex-wrap: wrap;
 }
@@ -1151,12 +1151,29 @@ body.mode-recibo .summary-total-box .total-value {
   }
 }
 
+.action-bar-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.action-bar-secondary {
+  justify-content: flex-start;
+}
+
+.action-bar-primary {
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
 /* Botão de Conversão em 1 Clique (Orçamento <-> Recibo) */
 .btn-convert-doc {
   border-color: #BFDBFE;
   background-color: #EFF6FF;
   color: #1D4ED8;
   font-weight: 600;
+  padding: 10px 18px;
 }
 
 .btn-convert-doc:hover {
@@ -1178,6 +1195,43 @@ body.mode-recibo .btn-convert-doc:hover {
   border-color: #6EE7B7;
   color: #047857;
   box-shadow: 0 4px 12px rgba(5, 150, 105, 0.12);
+}
+
+/* Botão de Visualização Nativa (Desktop) */
+.btn-preview-native {
+  border-color: #CBD5E1;
+  background-color: #FFFFFF;
+  color: #334155;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: all var(--transition-fast);
+}
+
+.btn-preview-native:hover {
+  background-color: #F8FAFC;
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+}
+
+body.mode-recibo .btn-preview-native:hover {
+  border-color: #059669;
+  color: #059669;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.12);
+}
+
+.btn-generate-primary {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 10px 24px;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+  transition: all var(--transition-fast);
+}
+
+.btn-generate-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35);
 }
 
 /* Botão do WhatsApp */
@@ -1205,6 +1259,323 @@ body.mode-recibo .btn-convert-doc:hover {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.btn-preview-mobile {
+  border-color: #CBD5E1 !important;
+  background-color: #FFFFFF !important;
+  color: #334155 !important;
+}
+
+.btn-preview-mobile:hover {
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+}
+
+body.mode-recibo .btn-preview-mobile:hover {
+  border-color: #059669 !important;
+  color: #059669 !important;
+}
+
+/* ==========================================================================
+   Visualizador Nativo de PDF (In-App Modal & Decision Bar)
+   ========================================================================== */
+.native-pdf-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.native-pdf-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.native-pdf-modal-container {
+  background-color: #FFFFFF;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 1080px;
+  height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96) translateY(12px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.native-pdf-modal-overlay.active .native-pdf-modal-container {
+  transform: scale(1) translateY(0);
+}
+
+/* Header do Visualizador */
+.native-pdf-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+  border-bottom: 1px solid var(--border-color);
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.native-pdf-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.native-pdf-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+}
+
+body.mode-recibo .native-pdf-icon-badge {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  color: #059669;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.12);
+}
+
+.native-pdf-header-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.native-pdf-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.native-pdf-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.native-pdf-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.native-pdf-badge.orcamento {
+  background-color: #DBEAFE;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.native-pdf-badge.recibo {
+  background-color: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+.native-pdf-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.btn-native-modal-close {
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #64748B;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-native-modal-close:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+  transform: rotate(90deg);
+}
+
+/* Corpo do Visualizador com iframe */
+.native-pdf-modal-body {
+  flex: 1;
+  background-color: #475569;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+}
+
+.native-pdf-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background-color: #475569;
+}
+
+.native-pdf-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 10;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.spinner-large {
+  width: 36px;
+  height: 36px;
+  border: 3.5px solid #E2E8F0;
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+body.mode-recibo .spinner-large {
+  border-top-color: #059669;
+}
+
+/* Footer do Visualizador */
+.native-pdf-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  background-color: #FFFFFF;
+  border-top: 1px solid var(--border-color);
+  gap: 14px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.native-pdf-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.native-pdf-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.btn-discard-preview {
+  border-color: #E2E8F0;
+  color: #64748B;
+  background-color: #F8FAFC;
+  font-weight: 600;
+  padding: 10px 18px;
+}
+
+.btn-discard-preview:hover {
+  background-color: #FEE2E2;
+  border-color: #FCA5A5;
+  color: #DC2626;
+  transform: translateY(-2px);
+}
+
+.btn-approve-download {
+  font-weight: 700;
+  padding: 11px 24px;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+}
+
+.btn-approve-download:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35);
+}
+
+/* Responsividade Mobile para o Modal */
+@media (max-width: 767px) {
+  .native-pdf-modal-overlay {
+    padding: 0;
+  }
+
+  .native-pdf-modal-container {
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .native-pdf-modal-header {
+    padding: 12px 14px;
+  }
+
+  .native-pdf-icon-badge {
+    display: none;
+  }
+
+  .native-pdf-title {
+    font-size: 1rem;
+  }
+
+  .native-pdf-subtitle {
+    display: none;
+  }
+
+  .native-pdf-modal-footer {
+    padding: 12px 14px;
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .native-pdf-footer-left,
+  .native-pdf-footer-right {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .native-pdf-footer-left .btn,
+  .native-pdf-footer-right .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .native-pdf-footer-right {
+    display: flex;
+    gap: 8px;
+  }
 }
 
 /* ==========================================================================

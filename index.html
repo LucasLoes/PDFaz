@@ -505,42 +505,44 @@
 
       <!-- Ações Principais (Desktop) com Centro de Produtividade -->
       <div class="desktop-action-bar">
-        <!-- Ação 1: Converter Documento em 1 clique -->
-        <button type="button" id="btn-convert-mode" class="btn btn-outline btn-lg btn-convert-doc" title="Converter este documento mantendo todos os dados">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="23 4 23 10 17 10"></polyline>
-            <polyline points="1 20 1 14 7 14"></polyline>
-            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-          </svg>
-          <span id="btn-convert-text">Transformar em Recibo</span>
-        </button>
+        <!-- Grupo Secundário (Esquerda): Formato & Compartilhamento -->
+        <div class="action-bar-group action-bar-secondary">
+          <button type="button" id="btn-convert-mode" class="btn btn-outline btn-convert-doc" title="Converter este documento mantendo todos os dados">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <polyline points="1 20 1 14 7 14"></polyline>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            <span id="btn-convert-text">Virar Recibo</span>
+          </button>
 
-        <!-- Ação 2: Compartilhar Resumo no WhatsApp -->
-        <button type="button" id="btn-whatsapp-share" class="btn btn-whatsapp btn-lg" title="Compartilhar resumo pré-formatado no WhatsApp">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-          </svg>
-          <span>WhatsApp</span>
-        </button>
+          <button type="button" id="btn-whatsapp-share" class="btn btn-whatsapp" title="Compartilhar resumo pré-formatado no WhatsApp">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            <span>WhatsApp</span>
+          </button>
+        </div>
 
-        <!-- Ação 3: Visualizar PDF -->
-        <button type="button" id="btn-preview-pdf" class="btn btn-outline btn-lg">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg>
-          <span id="btn-preview-text">Visualizar Orçamento</span>
-        </button>
+        <!-- Grupo Primário (Direita): Pré-visualização Nativa & Download Final -->
+        <div class="action-bar-group action-bar-primary">
+          <button type="button" id="btn-preview-pdf" class="btn btn-outline btn-lg btn-preview-native" title="Abrir pré-visualização nativa para conferência">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <span id="btn-preview-text">Visualizar Orçamento</span>
+          </button>
 
-        <!-- Ação 4: Baixar PDF -->
-        <button type="button" id="btn-generate-pdf" class="btn btn-success btn-lg">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          <span id="btn-generate-text">Baixar Orçamento</span>
-        </button>
+          <button type="button" id="btn-generate-pdf" class="btn btn-success btn-lg btn-generate-primary" title="Baixar PDF diretamente">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span id="btn-generate-text">Baixar Orçamento</span>
+          </button>
+        </div>
       </div>
 
     </form>
@@ -722,6 +724,12 @@
       <span class="value" id="mobile-total-display">R$ 0,00</span>
     </div>
     <div class="mobile-action-buttons">
+      <button type="button" id="btn-preview-pdf-mobile" class="btn btn-outline btn-sm btn-icon-only btn-preview-mobile" title="Visualizar documento antes de baixar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </button>
       <button type="button" id="btn-whatsapp-mobile" class="btn btn-whatsapp btn-sm btn-icon-only" title="Compartilhar no WhatsApp">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
           <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
@@ -737,6 +745,83 @@
       </button>
     </div>
   </aside>
+
+  <!-- ========================================================================
+       Visualizador Nativo de PDF (In-App Preview, Conferência e Decisão)
+       ======================================================================== -->
+  <div id="native-pdf-modal" class="native-pdf-modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="native-pdf-modal-title">
+    <div class="native-pdf-modal-container">
+      <!-- Header do Visualizador Nativo -->
+      <header class="native-pdf-modal-header">
+        <div class="native-pdf-header-left">
+          <div class="native-pdf-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <div class="native-pdf-header-titles">
+            <div class="native-pdf-title-row">
+              <h3 id="native-pdf-modal-title" class="native-pdf-title">Pré-visualização do Documento</h3>
+              <span id="native-pdf-doc-badge" class="native-pdf-badge orcamento">Orçamento #001</span>
+            </div>
+            <span class="native-pdf-subtitle">Confira o documento antes de emitir. Aprove para baixar agora ou descarte se quiser ajustar algo.</span>
+          </div>
+        </div>
+
+        <div class="native-pdf-header-actions">
+          <button type="button" id="btn-close-pdf-modal-x" class="btn-native-modal-close" aria-label="Fechar visualizador" title="Descartar e Voltar (Esc)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Corpo do Visualizador com IFrame Nativo -->
+      <div class="native-pdf-modal-body">
+        <div id="native-pdf-loading" class="native-pdf-loading" style="display: none;">
+          <div class="spinner-large"></div>
+          <p>Preparando documento oficial...</p>
+        </div>
+        <iframe id="native-pdf-iframe" class="native-pdf-iframe" title="Visualizador Nativo de PDFaz"></iframe>
+      </div>
+
+      <!-- Barra Inferior de Decisão: Descartar / Ajustar vs Aprovar & Baixar -->
+      <footer class="native-pdf-modal-footer">
+        <div class="native-pdf-footer-left">
+          <button type="button" id="btn-pdf-modal-discard" class="btn btn-outline btn-discard-preview" title="Fechar visualização sem baixar e voltar para a edição">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Descartar e Ajustar</span>
+          </button>
+        </div>
+
+        <div class="native-pdf-footer-right">
+          <button type="button" id="btn-pdf-modal-whatsapp" class="btn btn-whatsapp" title="Compartilhar resumo no WhatsApp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            <span>WhatsApp</span>
+          </button>
+
+          <button type="button" id="btn-pdf-modal-approve-download" class="btn btn-success btn-approve-download" title="Aprovar e baixar o PDF oficial agora">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span id="btn-pdf-modal-approve-text">Aprovar e Baixar PDF</span>
+          </button>
+        </div>
+      </footer>
+    </div>
+  </div>
 
   <!-- ========================================================================
        Pesquisa de Satisfação & Feedback (Disparada 15s pós-download ou manual)

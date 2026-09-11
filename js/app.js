@@ -148,7 +148,20 @@
     btnConvertMode: document.getElementById('btn-convert-mode'),
     btnConvertText: document.getElementById('btn-convert-text'),
     btnWhatsappShare: document.getElementById('btn-whatsapp-share'),
-    btnWhatsappMobile: document.getElementById('btn-whatsapp-mobile')
+    btnWhatsappMobile: document.getElementById('btn-whatsapp-mobile'),
+
+    // Visualizador Nativo de PDF (In-App Preview)
+    nativePdfModal: document.getElementById('native-pdf-modal'),
+    nativePdfIframe: document.getElementById('native-pdf-iframe'),
+    nativePdfLoading: document.getElementById('native-pdf-loading'),
+    nativePdfModalTitle: document.getElementById('native-pdf-modal-title'),
+    nativePdfDocBadge: document.getElementById('native-pdf-doc-badge'),
+    btnClosePdfModalX: document.getElementById('btn-close-pdf-modal-x'),
+    btnPdfModalDiscard: document.getElementById('btn-pdf-modal-discard'),
+    btnPdfModalApprove: document.getElementById('btn-pdf-modal-approve-download'),
+    btnPdfModalApproveText: document.getElementById('btn-pdf-modal-approve-text'),
+    btnPdfModalWhatsapp: document.getElementById('btn-pdf-modal-whatsapp'),
+    btnPreviewPdfMobile: document.getElementById('btn-preview-pdf-mobile')
   };
 
   // Instâncias do gerador QRCode.js
@@ -915,12 +928,22 @@
   // =========================================================================
 
   /**
-   * Atualiza com 100% de confiabilidade os textos dos botões de download e visualização
+   * Atualiza com 100% de confiabilidade os textos dos botões de download, visualização e conversão
    */
   function setActionButtonsText(docType) {
     const isRecibo = docType === 'recibo';
     const downloadLabel = isRecibo ? 'Baixar Recibo' : 'Baixar Orçamento';
     const previewLabel = isRecibo ? 'Visualizar Recibo' : 'Visualizar Orçamento';
+    const convertLabel = isRecibo ? 'Virar Orçamento' : 'Virar Recibo';
+
+    // 0. Botão de Conversão em 1 clique com nome curto
+    const btnConvert = document.getElementById('btn-convert-mode');
+    if (btnConvert) {
+      let spanConv = document.getElementById('btn-convert-text') || btnConvert.querySelector('span');
+      if (spanConv) {
+        spanConv.textContent = convertLabel;
+      }
+    }
 
     // 1. Botão Desktop de Download
     const btnGenDesktop = document.getElementById('btn-generate-pdf');
@@ -1018,7 +1041,7 @@
         dom.totalStatusPill.style.color = '#1D4ED8';
       }
       if (dom.mobileTotalLabel) dom.mobileTotalLabel.textContent = 'Total Orçamento';
-      if (dom.btnConvertText) dom.btnConvertText.textContent = 'Transformar em Recibo';
+      if (dom.btnConvertText) dom.btnConvertText.textContent = 'Virar Recibo';
 
       document.body.classList.remove('mode-recibo');
 
@@ -1051,7 +1074,7 @@
         dom.totalStatusPill.style.color = '#065F46';
       }
       if (dom.mobileTotalLabel) dom.mobileTotalLabel.textContent = 'Total Quitado';
-      if (dom.btnConvertText) dom.btnConvertText.textContent = 'Transformar em Orçamento';
+      if (dom.btnConvertText) dom.btnConvertText.textContent = 'Virar Orçamento';
 
       document.body.classList.add('mode-recibo');
       updateReciboDeclaration();
@@ -2030,20 +2053,27 @@
   }
 
   /**
+   * Constrói o nome de arquivo padrão padronizado do PDF
+   */
+  function buildDocumentFilename() {
+    const cleanDocType = state.docType === 'orcamento' ? 'orcamento' : 'recibo';
+    const cleanNum = (state.docNumber || '001').replace(/[^a-zA-Z0-9_-]/g, '');
+    const cleanClient = (state.clientName || 'cliente').toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 15);
+    return `${cleanDocType}_${cleanNum}_${cleanClient}.pdf`;
+  }
+
+  /**
    * Dispara o download automático do PDF com feedback
    */
   function generateAndDownloadPdf() {
     try {
       setButtonLoading(dom.btnGeneratePdf, true);
-      setButtonLoading(dom.btnGeneratePdfMobile, true);
+      if (dom.btnGeneratePdfMobile) setButtonLoading(dom.btnGeneratePdfMobile, true);
 
       setTimeout(() => {
         try {
           const doc = buildPdfDocument();
-          const cleanDocType = state.docType === 'orcamento' ? 'orcamento' : 'recibo';
-          const cleanNum = (state.docNumber || '001').replace(/[^a-zA-Z0-9_-]/g, '');
-          const cleanClient = (state.clientName || 'cliente').toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 15);
-          const fileName = `${cleanDocType}_${cleanNum}_${cleanClient}.pdf`;
+          const fileName = buildDocumentFilename();
 
           doc.save(fileName);
           showToast(`Arquivo "${fileName}" baixado com sucesso!`, 'success');
@@ -2053,40 +2083,144 @@
           showToast(`Erro ao gerar documento: ${err.message}`, 'danger');
         } finally {
           setButtonLoading(dom.btnGeneratePdf, false);
-          setButtonLoading(dom.btnGeneratePdfMobile, false);
+          if (dom.btnGeneratePdfMobile) setButtonLoading(dom.btnGeneratePdfMobile, false);
         }
       }, 150);
     } catch (e) {
       console.error(e);
       setButtonLoading(dom.btnGeneratePdf, false);
-      setButtonLoading(dom.btnGeneratePdfMobile, false);
+      if (dom.btnGeneratePdfMobile) setButtonLoading(dom.btnGeneratePdfMobile, false);
+    }
+  }
+
+  // =========================================================================
+  // Módulo: Visualizador Nativo de PDF (In-App Preview, Conferência e Decisão)
+  // =========================================================================
+  let activePreviewBlobUrl = null;
+  let activePreviewDoc = null;
+  let activePreviewFilename = '';
+
+  /**
+   * Abre o PDF no visualizador nativo da ferramenta para conferência antes do download
+   */
+  function openNativePdfViewer() {
+    try {
+      setButtonLoading(dom.btnPreviewPdf, true);
+      if (dom.btnPreviewPdfMobile) dom.btnPreviewPdfMobile.disabled = true;
+
+      // Exibe loading do visualizador se disponível
+      if (dom.nativePdfLoading) dom.nativePdfLoading.style.display = 'flex';
+
+      setTimeout(() => {
+        try {
+          // Constrói o documento e o nome do arquivo
+          activePreviewDoc = buildPdfDocument();
+          activePreviewFilename = buildDocumentFilename();
+
+          // Libera blob anterior se existir
+          if (activePreviewBlobUrl) {
+            URL.revokeObjectURL(activePreviewBlobUrl);
+          }
+
+          // Cria Blob PDF e URL de visualização
+          const blob = activePreviewDoc.output('blob');
+          activePreviewBlobUrl = URL.createObjectURL(blob);
+
+          if (dom.nativePdfIframe) {
+            dom.nativePdfIframe.src = activePreviewBlobUrl;
+          }
+
+          // Atualiza cabeçalho do visualizador nativo
+          const isRecibo = state.docType === 'recibo';
+          const docNum = (state.docNumber || '001').trim();
+
+          if (dom.nativePdfModalTitle) {
+            dom.nativePdfModalTitle.textContent = isRecibo ? 'Pré-visualização do Recibo de Quitação' : 'Pré-visualização do Orçamento Comercial';
+          }
+
+          if (dom.nativePdfDocBadge) {
+            dom.nativePdfDocBadge.textContent = isRecibo ? `Recibo #${docNum}` : `Orçamento #${docNum}`;
+            dom.nativePdfDocBadge.className = `native-pdf-badge ${isRecibo ? 'recibo' : 'orcamento'}`;
+          }
+
+          if (dom.btnPdfModalApproveText) {
+            dom.btnPdfModalApproveText.textContent = isRecibo ? 'Aprovar e Baixar Recibo' : 'Aprovar e Baixar Orçamento';
+          }
+
+          // Abre o modal nativo
+          if (dom.nativePdfModal) {
+            dom.nativePdfModal.classList.add('active');
+            dom.nativePdfModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+          }
+
+          if (dom.nativePdfLoading) {
+            setTimeout(() => {
+              dom.nativePdfLoading.style.display = 'none';
+            }, 300);
+          }
+
+          showToast('Visualizador nativo aberto. Confira o documento.', 'info');
+        } catch (err) {
+          console.error(err);
+          showToast(`Erro na pré-visualização: ${err.message}`, 'danger');
+          if (dom.nativePdfLoading) dom.nativePdfLoading.style.display = 'none';
+        } finally {
+          setButtonLoading(dom.btnPreviewPdf, false);
+          if (dom.btnPreviewPdfMobile) dom.btnPreviewPdfMobile.disabled = false;
+        }
+      }, 100);
+    } catch (e) {
+      console.error(e);
+      setButtonLoading(dom.btnPreviewPdf, false);
+      if (dom.btnPreviewPdfMobile) dom.btnPreviewPdfMobile.disabled = false;
+      if (dom.nativePdfLoading) dom.nativePdfLoading.style.display = 'none';
     }
   }
 
   /**
-   * Abre a pré-visualização do PDF em uma nova aba
+   * Fecha o visualizador nativo e descarta caso o usuário não aprove
    */
-  function previewPdf() {
-    try {
-      setButtonLoading(dom.btnPreviewPdf, true);
+  function closeNativePdfViewer(isDiscarded = false) {
+    if (!dom.nativePdfModal) return;
 
-      setTimeout(() => {
-        try {
-          const doc = buildPdfDocument();
-          const blobUrl = doc.output('bloburl');
-          window.open(blobUrl, '_blank');
-          showToast('Pré-visualização aberta em nova aba.', 'info');
-          scheduleSatisfactionSurvey(20000);
-        } catch (err) {
-          console.error(err);
-          showToast(`Erro na pré-visualização: ${err.message}`, 'danger');
-        } finally {
-          setButtonLoading(dom.btnPreviewPdf, false);
-        }
-      }, 150);
-    } catch (e) {
-      console.error(e);
-      setButtonLoading(dom.btnPreviewPdf, false);
+    dom.nativePdfModal.classList.remove('active');
+    dom.nativePdfModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+
+    if (dom.nativePdfIframe) {
+      dom.nativePdfIframe.src = 'about:blank';
+    }
+
+    if (activePreviewBlobUrl) {
+      URL.revokeObjectURL(activePreviewBlobUrl);
+      activePreviewBlobUrl = null;
+    }
+
+    if (isDiscarded) {
+      showToast('Visualização descartada. Você pode continuar editando.', 'info');
+    }
+  }
+
+  /**
+   * Aprova o documento visualizado e faz o download imediato do PDF
+   */
+  function approveAndDownloadFromPreview() {
+    try {
+      if (!activePreviewDoc) {
+        activePreviewDoc = buildPdfDocument();
+        activePreviewFilename = buildDocumentFilename();
+      }
+
+      activePreviewDoc.save(activePreviewFilename);
+      closeNativePdfViewer(false);
+
+      const isRecibo = state.docType === 'recibo';
+      showToast(isRecibo ? '🎉 Recibo aprovado e baixado com sucesso!' : '🎉 Orçamento aprovado e baixado com sucesso!', 'success');
+      scheduleSatisfactionSurvey(15000);
+    } catch (err) {
+      console.error(err);
+      showToast(`Erro ao baixar: ${err.message}`, 'danger');
     }
   }
 
@@ -2264,7 +2398,7 @@
       }
     });
 
-    // Botões de ação do PDF
+    // Botões de ação do PDF e Visualizador Nativo
     if (dom.btnGeneratePdf) {
       dom.btnGeneratePdf.addEventListener('click', generateAndDownloadPdf);
     }
@@ -2272,8 +2406,38 @@
       dom.btnGeneratePdfMobile.addEventListener('click', generateAndDownloadPdf);
     }
     if (dom.btnPreviewPdf) {
-      dom.btnPreviewPdf.addEventListener('click', previewPdf);
+      dom.btnPreviewPdf.addEventListener('click', openNativePdfViewer);
     }
+    if (dom.btnPreviewPdfMobile) {
+      dom.btnPreviewPdfMobile.addEventListener('click', openNativePdfViewer);
+    }
+
+    // Ações do Modal de Visualização Nativa
+    if (dom.btnClosePdfModalX) {
+      dom.btnClosePdfModalX.addEventListener('click', () => closeNativePdfViewer(true));
+    }
+    if (dom.btnPdfModalDiscard) {
+      dom.btnPdfModalDiscard.addEventListener('click', () => closeNativePdfViewer(true));
+    }
+    if (dom.btnPdfModalApprove) {
+      dom.btnPdfModalApprove.addEventListener('click', approveAndDownloadFromPreview);
+    }
+    if (dom.btnPdfModalWhatsapp) {
+      dom.btnPdfModalWhatsapp.addEventListener('click', shareOnWhatsApp);
+    }
+    if (dom.nativePdfModal) {
+      dom.nativePdfModal.addEventListener('click', (e) => {
+        if (e.target === dom.nativePdfModal) {
+          closeNativePdfViewer(true);
+        }
+      });
+    }
+    // Fechar visualizador com tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && dom.nativePdfModal && dom.nativePdfModal.classList.contains('active')) {
+        closeNativePdfViewer(true);
+      }
+    });
 
     // Botões auxiliares
     if (dom.btnLoadExample) {
