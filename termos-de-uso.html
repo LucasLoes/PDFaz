@@ -375,34 +375,157 @@
 
     </article>
 
-    <!-- Rodapé da Página Institucional -->
+    <!-- Rodapé Moderno Institucional & Documentação Legal -->
     <footer class="site-footer">
-      <div class="footer-content">
-        <p class="footer-line-brand">
-          PDFaz • Gerador Rápido de Orçamentos e Recibos &copy; 2026.
-        </p>
-        <p class="footer-line-mission">
-          Desenvolvido com foco total na autonomia, segurança jurídica e produtividade de prestadores de serviço e MEIs.
-        </p>
-        <p class="footer-line-privacy">
-          Privacidade garantida: Processamento estritamente local no seu navegador.
-        </p>
+      <div class="footer-container">
+        <!-- Topo do Rodapé: Marca, Missão & Garantia Local -->
+        <div class="footer-main-row">
+          <div class="footer-brand-pane">
+            <div class="footer-brand-header">
+              <a href="./" class="footer-brand-logo" title="Voltar ao início do PDFaz">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </a>
+              <div class="footer-brand-text">
+                <span class="footer-app-name">PDFaz</span>
+                <span class="footer-app-tag">Gerador de Orçamentos &amp; Recibos</span>
+              </div>
+              <span class="footer-badge-offline">
+                <span class="pulse-indicator"></span>
+                100% Client-Side
+              </span>
+            </div>
+            <p class="footer-mission-text">
+              Plataforma independente criada para dar agilidade, formalidade e autonomia diária aos prestadores de serviços, autônomos e microempreendedores individuais (MEIs) de todo o Brasil.
+            </p>
+          </div>
 
-        <div class="footer-legal-nav">
-          <span class="footer-legal-header">Documentos Legais &amp; Conformidade</span>
-          <div class="footer-legal-buttons">
-            <a href="politica-privacidade" class="footer-legal-btn">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="legal-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              <span>Política de Privacidade</span>
+          <div class="footer-security-pane">
+            <div class="footer-sec-card">
+              <div class="footer-sec-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </div>
+              <div class="footer-sec-content">
+                <span class="footer-sec-title">Privacidade por Design (Privacy by Design)</span>
+                <span class="footer-sec-desc">
+                  Nenhum dado digitado é enviado para servidores web. Cálculos e geração do PDF ocorrem estritamente na memória do seu navegador.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção Central: Documentação Legal & Proteção de Dados (Grid de Cards Modernos) -->
+        <div class="footer-legal-hub">
+          <div class="footer-legal-hub-header">
+            <div class="footer-legal-tag">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <span>Documentação Legal &amp; Proteção de Dados</span>
+            </div>
+            <span class="footer-legal-compliance">Conformidade com a LGPD (Lei Federal nº 13.709/2018)</span>
+          </div>
+
+          <div class="footer-cards-grid">
+            <!-- Card 1: Política de Privacidade -->
+            <a href="politica-privacidade" class="footer-legal-card" title="Abrir Política de Privacidade">
+              <div class="legal-card-icon legal-icon-privacy">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <div class="legal-card-info">
+                <div class="legal-card-title-row">
+                  <span class="legal-card-title">Política de Privacidade</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="legal-card-arrow">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </div>
+                <span class="legal-card-sub">Tratamento de dados e segurança local</span>
+              </div>
             </a>
-            <a href="termos-de-uso" class="footer-legal-btn">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="legal-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-              <span>Termos de Uso</span>
+
+            <!-- Card 2: Termos de Uso (Ativo) -->
+            <a href="termos-de-uso" class="footer-legal-card legal-card-active" title="Termos de Uso (Página Atual)">
+              <div class="legal-card-icon legal-icon-terms">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div class="legal-card-info">
+                <div class="legal-card-title-row">
+                  <span class="legal-card-title">Termos de Uso</span>
+                  <span class="legal-card-badge-current">Atual</span>
+                </div>
+                <span class="legal-card-sub">Condições e responsabilidades de uso</span>
+              </div>
             </a>
-            <a href="lgpd" class="footer-legal-btn btn-lgpd-highlight">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="legal-icon"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-              <span>Conformidade LGPD</span>
+
+            <!-- Card 3: Conformidade LGPD -->
+            <a href="lgpd" class="footer-legal-card legal-card-highlight-lgpd" title="Abrir Conformidade LGPD e Direitos do Titular">
+              <div class="legal-card-icon legal-icon-lgpd">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+              </div>
+              <div class="legal-card-info">
+                <div class="legal-card-title-row">
+                  <span class="legal-card-title">Conformidade LGPD</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="legal-card-arrow">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </div>
+                <span class="legal-card-sub">Lei 13.709/18 &amp; Direitos do Titular</span>
+              </div>
             </a>
+
+            <!-- Card 4: Avaliar o PDFaz -->
+            <a href="./?avaliar=1" class="footer-legal-card legal-card-survey" title="Avaliar o aplicativo e enviar sugestões">
+              <div class="legal-card-icon legal-icon-survey">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#F59E0B" stroke="#D97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div class="legal-card-info">
+                <div class="legal-card-title-row">
+                  <span class="legal-card-title">Avaliar o PDFaz</span>
+                  <span class="legal-card-badge-gold">Opine</span>
+                </div>
+                <span class="legal-card-sub">Envie sugestões em 30 segundos</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Barra Inferior de Direitos e Credenciais -->
+        <div class="footer-bottom-bar">
+          <div class="footer-copyright-text">
+            <span>&copy; 2026 <strong>PDFaz</strong> (pdfaz.com.br) • Todos os direitos reservados.</span>
+            <span class="footer-dot-sep">•</span>
+            <span>Versão Web 1.2 • Sem cookies de rastreamento</span>
+          </div>
+
+          <div class="footer-tech-badges">
+            <span class="tech-tag">Zero Servidor Externo</span>
+            <span class="tech-tag">PWA Instalável</span>
+            <span class="tech-tag">QR Code PIX Banco Central</span>
           </div>
         </div>
       </div>

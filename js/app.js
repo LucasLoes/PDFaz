@@ -2939,6 +2939,18 @@
         openSurveyModal();
       });
     }
+
+    // 7. Abertura automática ao vir redirecionado com ?avaliar=1 ou #avaliar
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('avaliar') === '1' || window.location.hash === '#avaliar') {
+        setTimeout(() => {
+          openSurveyModal();
+        }, 400);
+      }
+    } catch (e) {
+      // Ignora silenciosamente em navegadores antigos
+    }
   }
 
   // =========================================================================

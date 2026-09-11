@@ -3201,6 +3201,34 @@ body.mode-recibo .discount-toggle-btn.active {
   letter-spacing: 0.03em;
 }
 
+/* Estado Ativo para Documento Legal Aberto */
+.footer-legal-card.legal-card-active {
+  border-color: #93C5FD;
+  background: #EFF6FF;
+  cursor: default;
+}
+
+.footer-legal-card.legal-card-active.legal-card-highlight-lgpd {
+  border-color: #86EFAC;
+  background: #ECFDF5;
+}
+
+.legal-card-badge-current {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #DBEAFE;
+  color: #1D4ED8;
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+}
+
+.legal-card-highlight-lgpd .legal-card-badge-current {
+  background: #D1FAE5;
+  color: #047857;
+}
+
 /* Barra Inferior */
 .footer-bottom-bar {
   display: flex;
