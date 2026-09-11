@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+    <linearGradient id="boltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <linearGradient id="foldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#93C5FD" />
+      <stop offset="100%" stop-color="#BFDBFE" />
+    </linearGradient>
+    <filter id="dropShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#0F172A" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Fundo com cantos arredondados -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Documento Base com Sombra -->
+  <g filter="url(#dropShadow)">
+    <!-- Corpo do papel -->
+    <path d="M140 100 H300 L380 180 V400 C380 411 371 420 360 420 H140 C129 420 120 411 120 400 V120 C120 109 129 100 140 100 Z" fill="#FFFFFF" />
+    <!-- Dobra do canto superior direito -->
+    <path d="M300 100 V170 C300 176 304 180 310 180 H380 Z" fill="url(#foldGrad)" />
+  </g>
+
+  <!-- Linhas decorativas do documento -->
+  <rect x="170" y="220" width="130" height="18" rx="9" fill="#E2E8F0" />
+  <rect x="170" y="260" width="172" height="18" rx="9" fill="#E2E8F0" />
+  <rect x="170" y="300" width="110" height="18" rx="9" fill="#E2E8F0" />
+
+  <!-- Badge do Raio de Agilidade / Rapidez (Ágil) -->
+  <circle cx="340" cy="350" r="54" fill="#0F172A" />
+  <circle cx="340" cy="350" r="48" fill="#1E293B" />
+  <polygon points="345,314 318,354 338,354 335,386 362,346 342,346" fill="url(#boltGrad)" />
+
+  <!-- Texto "PDF" pequeno no topo do documento -->
+  <rect x="166" y="146" width="68" height="24" rx="6" fill="#2563EB" />
+  <text x="200" y="163" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="13" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">PDF</text>
+</svg>

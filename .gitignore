@@ -1,0 +1,4 @@
+.vercel/
+*.code-workspace
+.DS_Store
+Thumbs.db
