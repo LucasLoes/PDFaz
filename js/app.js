@@ -118,7 +118,23 @@
     btnInstallPwa: document.getElementById('btn-install-pwa'),
 
     // Container de Toasts
-    toastContainer: document.getElementById('toast-container')
+    toastContainer: document.getElementById('toast-container'),
+
+    // Pesquisa de Satisfação & Feedback
+    surveyBackdrop: document.getElementById('survey-backdrop'),
+    surveyCard: document.getElementById('survey-card'),
+    surveyForm: document.getElementById('survey-form'),
+    surveyBtnClose: document.getElementById('survey-btn-close'),
+    surveyBtnLater: document.getElementById('survey-btn-later'),
+    surveyBtnSubmit: document.getElementById('survey-btn-submit'),
+    surveySubmitText: document.getElementById('survey-submit-text'),
+    surveyStarsGroup: document.getElementById('survey-stars-group'),
+    surveyRatingText: document.getElementById('survey-rating-text'),
+    surveyRecommendGroup: document.getElementById('survey-recommend-group'),
+    surveyFeatureSuggestion: document.getElementById('survey-feature-suggestion'),
+    surveySuccessCard: document.getElementById('survey-success-card'),
+    surveyBtnCloseSuccess: document.getElementById('survey-btn-close-success'),
+    btnOpenSurvey: document.getElementById('btn-open-survey')
   };
 
   // Instâncias do gerador QRCode.js
@@ -1818,6 +1834,7 @@
 
           doc.save(fileName);
           showToast(`Arquivo "${fileName}" baixado com sucesso!`, 'success');
+          scheduleSatisfactionSurvey(15000);
         } catch (err) {
           console.error(err);
           showToast(`Erro ao gerar documento: ${err.message}`, 'danger');
@@ -1846,6 +1863,7 @@
           const blobUrl = doc.output('bloburl');
           window.open(blobUrl, '_blank');
           showToast('Pré-visualização aberta em nova aba.', 'info');
+          scheduleSatisfactionSurvey(20000);
         } catch (err) {
           console.error(err);
           showToast(`Erro na pré-visualização: ${err.message}`, 'danger');
@@ -2034,6 +2052,247 @@
 
     // Inicialização do PWA (Service Worker & Instalação Nativa)
     setupPWA();
+
+    // Inicialização da Pesquisa de Satisfação pós-download
+    setupSatisfactionSurvey();
+  }
+
+  // =========================================================================
+  // Módulo: Pesquisa de Satisfação & Feedback pós-download
+  // =========================================================================
+  const surveyState = {
+    rating: 0,
+    recommend: '',
+    feedback: '',
+    timerId: null
+  };
+
+  const RATING_LABELS = {
+    1: '1 de 5 • Pouco útil 🙁',
+    2: '2 de 5 • Razoável 😐',
+    3: '3 de 5 • Útil e prático 🙂',
+    4: '4 de 5 • Muito bom e rápido! 😊',
+    5: '5 de 5 • Excelente e indispensável! 🤩'
+  };
+
+  /**
+   * Programa a exibição da pesquisa após o download ou pré-visualização
+   * @param {number} delayMs Tempo em milissegundos (padrão: 15 segundos)
+   */
+  function scheduleSatisfactionSurvey(delayMs = 15000) {
+    // 1. Não exibe automaticamente se já respondeu
+    const hasAnswered = localStorage.getItem('pdfaz_survey_done') === 'true';
+    if (hasAnswered) return;
+
+    // 2. Não exibe se dispensou recentemente (7 dias de carência)
+    const dismissedAt = localStorage.getItem('pdfaz_survey_dismissed_at');
+    if (dismissedAt) {
+      const daysPassed = (Date.now() - parseInt(dismissedAt, 10)) / (1000 * 60 * 60 * 24);
+      if (daysPassed < 7) return;
+    }
+
+    if (surveyState.timerId) {
+      clearTimeout(surveyState.timerId);
+    }
+
+    surveyState.timerId = setTimeout(() => {
+      openSurveyModal();
+    }, delayMs);
+  }
+
+  function openSurveyModal() {
+    if (!dom.surveyBackdrop) return;
+    if (dom.surveyForm && dom.surveySuccessCard) {
+      dom.surveyForm.style.display = 'block';
+      dom.surveySuccessCard.style.display = 'none';
+      if (dom.surveyBtnSubmit) {
+        dom.surveyBtnSubmit.disabled = !surveyState.rating || !surveyState.recommend;
+      }
+    }
+    dom.surveyBackdrop.classList.add('active');
+    dom.surveyBackdrop.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeSurveyModal(isDismiss = true) {
+    if (!dom.surveyBackdrop) return;
+    dom.surveyBackdrop.classList.remove('active');
+    dom.surveyBackdrop.setAttribute('aria-hidden', 'true');
+    if (isDismiss) {
+      localStorage.setItem('pdfaz_survey_dismissed_at', Date.now().toString());
+    }
+  }
+
+  function updateSurveyStarsVisual(highlightValue) {
+    if (!dom.surveyStarsGroup) return;
+    const stars = dom.surveyStarsGroup.querySelectorAll('.survey-star');
+    stars.forEach(star => {
+      const val = parseInt(star.getAttribute('data-rating'), 10);
+      if (val <= highlightValue) {
+        star.classList.add('active');
+      } else {
+        star.classList.remove('active');
+      }
+    });
+
+    if (dom.surveyRatingText) {
+      if (highlightValue > 0 && RATING_LABELS[highlightValue]) {
+        dom.surveyRatingText.textContent = RATING_LABELS[highlightValue];
+      } else {
+        dom.surveyRatingText.textContent = 'Clique para selecionar de 1 a 5 estrelas';
+      }
+    }
+  }
+
+  function checkSurveyValidation() {
+    const isValid = surveyState.rating > 0 && surveyState.recommend.trim().length > 0;
+    if (dom.surveyBtnSubmit) {
+      dom.surveyBtnSubmit.disabled = !isValid;
+    }
+  }
+
+  async function submitSurvey(e) {
+    if (e) e.preventDefault();
+    if (!surveyState.rating || !surveyState.recommend) {
+      showToast('Por favor, informe uma nota de 1 a 5 e se você recomendaria.', 'warning');
+      return;
+    }
+
+    const featureText = dom.surveyFeatureSuggestion ? dom.surveyFeatureSuggestion.value.trim() : '';
+
+    const payload = {
+      _subject: `[PDFaz.com.br] Nova Avaliação de Satisfação (${surveyState.rating}★)`,
+      _template: 'table',
+      _captcha: 'false',
+      _honey: '',
+      aplicativo: 'PDFaz.com.br',
+      data_envio: new Date().toLocaleString('pt-BR'),
+      utilidade_nota: `${surveyState.rating} de 5 (${RATING_LABELS[surveyState.rating] || ''})`,
+      recomendaria: surveyState.recommend,
+      recursos_que_sentiu_falta: featureText || '(Nenhum comentário preenchido)',
+      tipo_documento_utilizado: state.docType || 'não definido',
+      valor_total: dom.totalDisplay ? dom.totalDisplay.textContent : 'R$ 0,00'
+    };
+
+    // Salva cópia localmente (backup no LocalStorage)
+    try {
+      const history = JSON.parse(localStorage.getItem('pdfaz_feedback_history') || '[]');
+      history.push({ ...payload, timestamp: Date.now() });
+      localStorage.setItem('pdfaz_feedback_history', JSON.stringify(history));
+    } catch (err) {
+      console.warn('Erro ao salvar feedback local:', err);
+    }
+
+    // Feedback visual no botão
+    if (dom.surveyBtnSubmit) {
+      dom.surveyBtnSubmit.disabled = true;
+      if (dom.surveySubmitText) {
+        dom.surveySubmitText.textContent = 'Enviando...';
+      }
+    }
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/lucasladeiraloes@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      console.log('[Feedback] Enviado com sucesso via FormSubmit:', data);
+    } catch (networkError) {
+      console.warn('[Feedback] FormSubmit offline ou bloqueado, salvo em LocalStorage:', networkError);
+    } finally {
+      localStorage.setItem('pdfaz_survey_done', 'true');
+
+      if (dom.surveyForm) dom.surveyForm.style.display = 'none';
+      if (dom.surveySuccessCard) dom.surveySuccessCard.style.display = 'block';
+
+      showToast('Obrigado pelo seu feedback!', 'success');
+
+      setTimeout(() => {
+        closeSurveyModal(false);
+      }, 4000);
+    }
+  }
+
+  function setupSatisfactionSurvey() {
+    // 1. Estrelas interativas
+    if (dom.surveyStarsGroup) {
+      const stars = dom.surveyStarsGroup.querySelectorAll('.survey-star');
+      stars.forEach(star => {
+        const ratingVal = parseInt(star.getAttribute('data-rating'), 10);
+
+        star.addEventListener('click', () => {
+          surveyState.rating = ratingVal;
+          updateSurveyStarsVisual(surveyState.rating);
+          checkSurveyValidation();
+        });
+
+        star.addEventListener('mouseenter', () => {
+          stars.forEach(s => {
+            const v = parseInt(s.getAttribute('data-rating'), 10);
+            if (v <= ratingVal) {
+              s.classList.add('hover-active');
+            } else {
+              s.classList.remove('hover-active');
+            }
+          });
+        });
+
+        star.addEventListener('mouseleave', () => {
+          stars.forEach(s => s.classList.remove('hover-active'));
+        });
+      });
+    }
+
+    // 2. Chips de Recomendação
+    if (dom.surveyRecommendGroup) {
+      const chips = dom.surveyRecommendGroup.querySelectorAll('.survey-chip');
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          chips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          surveyState.recommend = chip.getAttribute('data-recommend') || '';
+          checkSurveyValidation();
+        });
+      });
+    }
+
+    // 3. Botão Enviar
+    if (dom.surveyBtnSubmit) {
+      dom.surveyBtnSubmit.addEventListener('click', submitSurvey);
+    }
+
+    // 4. Botões Fechar e Agora não
+    if (dom.surveyBtnClose) {
+      dom.surveyBtnClose.addEventListener('click', () => closeSurveyModal(true));
+    }
+    if (dom.surveyBtnLater) {
+      dom.surveyBtnLater.addEventListener('click', () => closeSurveyModal(true));
+    }
+    if (dom.surveyBtnCloseSuccess) {
+      dom.surveyBtnCloseSuccess.addEventListener('click', () => closeSurveyModal(false));
+    }
+
+    // 5. Clique fora no Backdrop fecha modal
+    if (dom.surveyBackdrop) {
+      dom.surveyBackdrop.addEventListener('click', (e) => {
+        if (e.target === dom.surveyBackdrop) {
+          closeSurveyModal(true);
+        }
+      });
+    }
+
+    // 6. Botão manual no rodapé "Avaliar PDFaz"
+    if (dom.btnOpenSurvey) {
+      dom.btnOpenSurvey.addEventListener('click', (e) => {
+        e.preventDefault();
+        openSurveyModal();
+      });
+    }
   }
 
   // =========================================================================

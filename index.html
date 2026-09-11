@@ -634,6 +634,13 @@
                 <line x1="10" y1="14" x2="21" y2="3"></line>
               </svg>
             </a>
+
+            <button type="button" id="btn-open-survey" class="footer-legal-btn btn-survey-highlight" title="Avaliar o aplicativo e enviar sugestões">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="#D97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="legal-icon">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              <span>Avaliar PDFaz</span>
+            </button>
           </div>
           <span class="footer-legal-subtext">Arquitetura descentralizada • Dados mantidos sob estrito controle no seu próprio dispositivo</span>
         </div>
@@ -659,6 +666,124 @@
       <span id="btn-generate-mobile-text">Baixar Orçamento</span>
     </button>
   </aside>
+
+  <!-- ========================================================================
+       Pesquisa de Satisfação & Feedback (Disparada 15s pós-download ou manual)
+       ======================================================================== -->
+  <div id="survey-backdrop" class="survey-backdrop" aria-hidden="true">
+    <aside id="survey-card" class="survey-card" role="dialog" aria-labelledby="survey-title" aria-modal="true">
+      <!-- Cabeçalho da Pesquisa -->
+      <div class="survey-header">
+        <div class="survey-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <span id="survey-title">Sua Opinião Importa</span>
+        </div>
+        <button type="button" id="survey-btn-close" class="survey-close-btn" aria-label="Fechar pesquisa" title="Fechar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="survey-intro">
+        Leva menos de 30 segundos e nos ajuda a manter o <strong>PDFaz.com.br</strong> sempre ágil e 100% gratuito!
+      </div>
+
+      <!-- Formulário de Avaliação -->
+      <form id="survey-form" class="survey-form" onsubmit="return false;">
+        <!-- Pergunta 1: Utilidade -->
+        <div class="survey-group">
+          <label class="survey-label">
+            1. Este aplicativo foi útil para você? <span class="required">*</span>
+          </label>
+          <div class="survey-stars-wrapper" id="survey-stars-group" role="radiogroup" aria-label="Avaliação de 1 a 5 estrelas">
+            <button type="button" class="survey-star" data-rating="1" aria-label="1 estrela - Pouco útil">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </button>
+            <button type="button" class="survey-star" data-rating="2" aria-label="2 estrelas - Razoável">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </button>
+            <button type="button" class="survey-star" data-rating="3" aria-label="3 estrelas - Útil">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </button>
+            <button type="button" class="survey-star" data-rating="4" aria-label="4 estrelas - Muito bom">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </button>
+            <button type="button" class="survey-star" data-rating="5" aria-label="5 estrelas - Excelente">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </button>
+          </div>
+          <div class="survey-rating-feedback" id="survey-rating-text">Clique para selecionar de 1 a 5 estrelas</div>
+        </div>
+
+        <!-- Pergunta 2: Recomendação -->
+        <div class="survey-group">
+          <label class="survey-label">
+            2. Você recomendaria este aplicativo? <span class="required">*</span>
+          </label>
+          <div class="survey-chips-group" id="survey-recommend-group" role="radiogroup" aria-label="Recomendação">
+            <button type="button" class="survey-chip" data-recommend="Sim, com certeza!" aria-label="Sim, com certeza">
+              <span>🚀 Sim, com certeza!</span>
+            </button>
+            <button type="button" class="survey-chip" data-recommend="Talvez" aria-label="Talvez">
+              <span>🤔 Talvez</span>
+            </button>
+            <button type="button" class="survey-chip" data-recommend="Não" aria-label="Não">
+              <span>👎 Não</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pergunta 3: Recursos Faltantes -->
+        <div class="survey-group">
+          <label class="survey-label" for="survey-feature-suggestion">
+            3. Existe algum recurso que você sentiu falta?
+            <span class="optional">(opcional)</span>
+          </label>
+          <textarea 
+            id="survey-feature-suggestion" 
+            class="form-textarea survey-textarea" 
+            rows="2" 
+            placeholder="Ex: mais opções de cores, logo da empresa, formas de parcelamento..."
+          ></textarea>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="survey-actions">
+          <button type="button" id="survey-btn-later" class="btn btn-ghost btn-sm survey-btn-dismiss">
+            Agora não
+          </button>
+          <button type="button" id="survey-btn-submit" class="btn btn-primary btn-sm survey-btn-submit" disabled>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            <span id="survey-submit-text">Enviar Avaliação</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Estado de Sucesso pós-envio -->
+      <div id="survey-success-card" class="survey-success-card" style="display: none;">
+        <div class="survey-success-icon">
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h4 class="survey-success-title">Muito obrigado pelo seu feedback!</h4>
+        <p class="survey-success-desc">
+          Sua avaliação ajuda diretamente na evolução contínua do PDFaz.com.br para toda a comunidade de MEIs e autônomos.
+        </p>
+        <button type="button" id="survey-btn-close-success" class="btn btn-primary btn-sm" style="margin-top: 14px; width: 100%;">
+          Concluir
+        </button>
+      </div>
+    </aside>
+  </div>
 
   <!-- Container de Mensagens Toast -->
   <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
