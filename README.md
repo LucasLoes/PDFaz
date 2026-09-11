@@ -65,23 +65,3 @@ Como a aplicação está alocada no diretório do XAMPP (`htdocs/aplicativo`):
 3. A aplicação carregará imediatamente pronta para uso.
 
 ---
-
-## Como Hospedar na Vercel com o Domínio `pdfaz.com.br`
-
-O PDFaz é uma aplicação estática (HTML/CSS/JS), o que a torna perfeita para hospedagem gratuita com SSL automático e alta velocidade na Vercel ou Netlify.
-
-### Passo a passo para a Vercel:
-1. **Suba os arquivos para o GitHub** ou instale a CLI da Vercel no terminal:
-   ```bash
-   npm i -g vercel
-   cd c:\xampp\htdocs\aplicativo
-   vercel
-   ```
-2. **Configuração de Domínio Personalizado (`pdfaz.com.br`):**
-   - Acesse o painel do seu projeto na Vercel: **Settings > Domains**.
-   - Adicione o domínio `pdfaz.com.br` e `www.pdfaz.com.br`.
-3. **Apontamento de DNS no Registro.br:**
-   - No painel onde registrou `pdfaz.com.br` (ex: Registro.br), configure os seguintes registros DNS:
-     - **Tipo A:** Nome `@` ou vazio -> Apontando para `76.76.21.21` (IP da Vercel).
-     - **Tipo CNAME:** Nome `www` -> Apontando para `cname.vercel-dns.com`.
-4. Em poucos minutos o certificado SSL gratuito (HTTPS) será emitido e seu site estará no ar globalmente.
