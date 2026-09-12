@@ -2152,16 +2152,16 @@
       `;
     });
 
-    // QR Code PIX
+    // QR Code PIX (somente se habilitado e com chave preenchida)
     let qrDataUrl = null;
     if (state.includePixQr && state.pixKey) {
       const pixPayload = getCurrentDocumentPixPayload();
       if (pixPayload) {
         qrDataUrl = generateQrCodeDataUrl(pixPayload, 200);
       }
-    }
-    if (!qrDataUrl) {
-      qrDataUrl = getPixQrCodeDataUrl();
+      if (!qrDataUrl && typeof getQrCodeDataUrl === 'function') {
+        qrDataUrl = getQrCodeDataUrl();
+      }
     }
 
     // Bloco Esquerdo Inferior: PIX ou Declaração de Quitação
