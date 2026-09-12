@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>PDFaz • Gerador Rápido de Orçamentos e Recibos em PDF</title>
-  
+
   <!-- SEO Canônico & Indexação -->
   <link rel="canonical" href="https://www.pdfaz.com.br/">
-  <meta name="description" content="Gere orçamentos e recibos profissionais em PDF em segundos. 100% gratuito, sem cadastro e com total privacidade no seu navegador. Com cálculo automático de descontos, PIX Copia e Cola e QR Code dinâmico para MEIs e autônomos.">
-  <meta name="keywords" content="gerador de orcamento, recibo pdf, orcamento mei, gerar recibo online, pdfaz, modelo de orcamento, recibo de pagamento simples, orcamento com pix, recibo mei, criar orcamento gratis">
+  <meta name="description"
+    content="Gere orçamentos e recibos profissionais em PDF em segundos. 100% gratuito, sem cadastro e com total privacidade no seu navegador. Com cálculo automático de descontos, PIX Copia e Cola e QR Code dinâmico para MEIs e autônomos.">
+  <meta name="keywords"
+    content="gerador de orcamento, recibo pdf, orcamento mei, gerar recibo online, pdfaz, modelo de orcamento, recibo de pagamento simples, orcamento com pix, recibo mei, criar orcamento gratis">
   <meta name="author" content="Lucas Ladeira Loes - PDFaz">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -16,14 +19,15 @@
   <meta name="language" content="Portuguese">
   <meta name="geo.region" content="BR">
   <meta name="rating" content="general">
-  
+
   <!-- Open Graph / Redes Sociais & WhatsApp / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PDFaz">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:url" content="https://www.pdfaz.com.br/">
   <meta property="og:title" content="PDFaz • Gerador de Orçamentos e Recibos em PDF Online e Grátis">
-  <meta property="og:description" content="Crie orçamentos e recibos comerciais elegantes em PDF diretamente no seu navegador. 100% gratuito, sem login, com cálculo automático e QR Code PIX.">
+  <meta property="og:description"
+    content="Crie orçamentos e recibos comerciais elegantes em PDF diretamente no seu navegador. 100% gratuito, sem login, com cálculo automático e QR Code PIX.">
   <meta property="og:image" content="https://www.pdfaz.com.br/icons/icon-512.png">
   <meta property="og:image:width" content="512">
   <meta property="og:image:height" content="512">
@@ -33,7 +37,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://www.pdfaz.com.br/">
   <meta name="twitter:title" content="PDFaz • Gerador de Orçamentos e Recibos em PDF Online e Grátis">
-  <meta name="twitter:description" content="Crie orçamentos e recibos comerciais elegantes em PDF no seu navegador. Gratuito, sem cadastro, com cálculo automático e QR Code PIX.">
+  <meta name="twitter:description"
+    content="Crie orçamentos e recibos comerciais elegantes em PDF no seu navegador. Gratuito, sem cadastro, com cálculo automático e QR Code PIX.">
   <meta name="twitter:image" content="https://www.pdfaz.com.br/icons/icon-512.png">
 
   <!-- Dados Estruturados Schema.org (JSON-LD para Google Search) -->
@@ -110,6 +115,7 @@
   <!-- Script da Aplicação -->
   <script src="js/app.js" defer></script>
 </head>
+
 <body>
 
   <!-- ========================================================================
@@ -120,7 +126,8 @@
       <a href="./" class="brand" title="PDFaz - Gerador de Orçamentos e Recibos">
         <div class="brand-icon">
           <!-- Ícone SVG de Documento com Raio -->
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -137,8 +144,10 @@
       <!-- Ações Rápidas no Cabeçalho -->
       <div class="header-actions">
         <!-- Botão de Instalação Nativa PWA (Exibido quando compatível) -->
-        <button type="button" id="btn-install-pwa" class="btn btn-primary btn-sm btn-install-app" style="display: none;" title="Instalar aplicativo no seu computador ou celular">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <button type="button" id="btn-install-pwa" class="btn btn-primary btn-sm btn-install-app" style="display: none;"
+          title="Instalar aplicativo no seu computador ou celular">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -146,15 +155,18 @@
           <span id="btn-install-text">Instalar App</span>
         </button>
 
-        <button type="button" id="btn-load-example" class="btn btn-outline btn-sm" title="Preencher com dados de exemplo">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button type="button" id="btn-load-example" class="btn btn-outline btn-sm"
+          title="Preencher com dados de exemplo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
           </svg>
           <span>Exemplo</span>
         </button>
 
         <button type="button" id="btn-clear-form" class="btn btn-ghost btn-sm" title="Limpar todos os campos">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
           </svg>
@@ -172,7 +184,8 @@
     <!-- Hero / Destaque Institucional -->
     <section class="hero-banner">
       <div class="hero-pill">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
         </svg>
         100% Gratuito & Seguro • Sem Cadastro
@@ -190,7 +203,8 @@
       <div class="card">
         <div class="card-header">
           <h2 class="card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
               <line x1="16" y1="2" x2="16" y2="6"></line>
               <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -198,16 +212,20 @@
             </svg>
             Tipo & Identificação do Documento
           </h2>
-          <span class="hero-pill" style="margin-bottom: 0; background-color: var(--bg-muted); border-color: var(--border-color); color: var(--text-muted);" id="doc-type-badge-text">
+          <span class="hero-pill"
+            style="margin-bottom: 0; background-color: var(--bg-muted); border-color: var(--border-color); color: var(--text-muted);"
+            id="doc-type-badge-text">
             Orçamento
           </span>
         </div>
 
         <!-- Alternador Orçamento / Recibo com Super Cards de Decisão -->
         <div class="doc-type-cards-grid" role="tablist">
-          <button type="button" id="btn-type-orcamento" class="doc-type-card-btn active" role="tab" aria-selected="true">
+          <button type="button" id="btn-type-orcamento" class="doc-type-card-btn active" role="tab"
+            aria-selected="true">
             <div class="doc-card-icon-wrapper orcamento">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                 <polyline points="14 2 14 8 20 8"></polyline>
                 <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -222,13 +240,16 @@
               <span class="doc-card-desc">Negociação, validade, condições e QR Code para pagamento</span>
             </div>
             <div class="doc-card-check">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
             </div>
           </button>
 
           <button type="button" id="btn-type-recibo" class="doc-type-card-btn" role="tab" aria-selected="false">
             <div class="doc-card-icon-wrapper recibo">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 <polyline points="9 12 11 14 15 10"></polyline>
               </svg>
@@ -241,7 +262,9 @@
               <span class="doc-card-desc">Comprovante de pagamento com fé pública e quitação</span>
             </div>
             <div class="doc-card-check">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
             </div>
           </button>
         </div>
@@ -254,7 +277,8 @@
             </label>
             <div class="input-with-button">
               <input type="text" id="doc-number" class="form-input" placeholder="Ex: 001 ou 2026-01" value="001">
-              <button type="button" id="btn-increment-doc" class="btn btn-outline btn-increment" title="Avançar para o próximo número (+1)">
+              <button type="button" id="btn-increment-doc" class="btn btn-outline btn-increment"
+                title="Avançar para o próximo número (+1)">
                 <span>+1</span>
               </button>
             </div>
@@ -267,7 +291,8 @@
 
           <!-- Campo específico de Orçamento -->
           <div class="form-group" id="orcamento-specific-fields">
-            <label for="doc-validity" class="form-label">Validade da Proposta <span class="optional">(Opcional)</span></label>
+            <label for="doc-validity" class="form-label">Validade da Proposta <span
+                class="optional">(Opcional)</span></label>
             <input type="date" id="doc-validity" class="form-input">
           </div>
 
@@ -288,26 +313,29 @@
         <!-- Pré-visualização da Declaração de Quitação no Modo Recibo -->
         <div id="recibo-declaration-box" class="recibo-declaration-preview" style="display: none;">
           <div class="declaration-badge">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
               <polyline points="22 4 12 14.01 9 11.01"></polyline>
             </svg>
             Declaração de Quitação (Incluída no Recibo)
           </div>
           <p id="recibo-declaration-text" class="declaration-text">
-            Declaramos para os devidos fins que recebemos de <strong>[Cliente]</strong> a importância de <strong>R$ 0,00</strong>, referente aos serviços descritos abaixo, dando plena e irrevogável quitação.
+            Declaramos para os devidos fins que recebemos de <strong>[Cliente]</strong> a importância de <strong>R$
+              0,00</strong>, referente aos serviços descritos abaixo, dando plena e irrevogável quitação.
           </p>
         </div>
       </div>
 
       <!-- CARD 2: Dados do Emissor (Prestador) e do Cliente -->
       <div class="form-grid form-grid-2">
-        
+
         <!-- Emissor (DE) -->
         <div class="card card-party card-emitter">
           <div class="card-header">
             <h2 class="card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
@@ -341,7 +369,8 @@
         <div class="card card-party card-client">
           <div class="card-header">
             <h2 class="card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="9" cy="7" r="4"></circle>
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -357,12 +386,15 @@
               <input type="text" id="client-name" class="form-input" placeholder="Ex: Mariana Ferreira Consultoria">
             </div>
             <div class="form-group">
-              <label for="client-doc" class="form-label">CPF ou CNPJ do Cliente <span class="optional">(Opcional)</span></label>
+              <label for="client-doc" class="form-label">CPF ou CNPJ do Cliente <span
+                  class="optional">(Opcional)</span></label>
               <input type="text" id="client-doc" class="form-input" placeholder="000.000.000-00">
             </div>
             <div class="form-group">
-              <label for="client-address" class="form-label">Endereço / Cidade - UF <span class="optional">(Opcional)</span></label>
-              <input type="text" id="client-address" class="form-input" placeholder="Ex: Av. Brasil, 500 - São Paulo, SP">
+              <label for="client-address" class="form-label">Endereço / Cidade - UF <span
+                  class="optional">(Opcional)</span></label>
+              <input type="text" id="client-address" class="form-input"
+                placeholder="Ex: Av. Brasil, 500 - São Paulo, SP">
             </div>
           </div>
         </div>
@@ -373,7 +405,8 @@
       <div class="card">
         <div class="card-header">
           <h2 class="card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <line x1="8" y1="6" x2="21" y2="6"></line>
               <line x1="8" y1="12" x2="21" y2="12"></line>
               <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -403,13 +436,15 @@
         <!-- Botão Adicionar Item com Dica de Atalho -->
         <div class="add-item-action">
           <button type="button" id="btn-add-item" class="btn btn-outline btn-add-item-modern">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
             <span>Adicionar Novo Item</span>
           </button>
-          <span class="add-item-hint">Dica: Pressione <strong>Enter</strong> no preço unitário para adicionar rapidamente</span>
+          <span class="add-item-hint">Dica: Pressione <strong>Enter</strong> no preço unitário para adicionar
+            rapidamente</span>
         </div>
 
         <!-- Resumo Financeiro / Totais Executivo -->
@@ -423,21 +458,16 @@
             <div class="discount-label-col">
               <span class="summary-label">Desconto:</span>
               <div class="discount-type-toggle" role="radiogroup" aria-label="Tipo de Desconto">
-                <button type="button" class="discount-toggle-btn active" id="btn-discount-currency" title="Desconto em Reais (R$)">R$</button>
-                <button type="button" class="discount-toggle-btn" id="btn-discount-percent" title="Desconto em Porcentagem (%)">%</button>
+                <button type="button" class="discount-toggle-btn active" id="btn-discount-currency"
+                  title="Desconto em Reais (R$)">R$</button>
+                <button type="button" class="discount-toggle-btn" id="btn-discount-percent"
+                  title="Desconto em Porcentagem (%)">%</button>
               </div>
             </div>
             <div class="discount-input-wrapper">
               <div class="input-prefix-wrapper discount-field">
                 <span class="input-prefix" id="discount-symbol">R$</span>
-                <input 
-                  type="number" 
-                  id="input-discount" 
-                  class="form-input" 
-                  min="0" 
-                  step="0.01" 
-                  placeholder="0,00"
-                >
+                <input type="number" id="input-discount" class="form-input" min="0" step="0.01" placeholder="0,00">
               </div>
             </div>
           </div>
@@ -458,14 +488,18 @@
       <div class="card" id="card-payment-pix">
         <div class="card-header">
           <h2 class="card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="4" width="20" height="16" rx="2"></rect>
               <line x1="2" y1="10" x2="22" y2="10"></line>
             </svg>
             Dados de Pagamento & Chave PIX
           </h2>
-          <span class="hero-pill" style="margin-bottom: 0; background-color: var(--success-light); border-color: var(--success-border); color: var(--success-hover);">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span class="hero-pill"
+            style="margin-bottom: 0; background-color: var(--success-light); border-color: var(--success-border); color: var(--success-hover);">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
             PIX Instantâneo
           </span>
         </div>
@@ -479,15 +513,11 @@
                 <span class="optional">CNPJ, CPF, Celular, E-mail ou Aleatória</span>
               </label>
               <div class="input-with-button">
-                <input 
-                  type="text" 
-                  id="pix-key-input" 
-                  class="form-input" 
-                  placeholder="Ex: 45.123.789/0001-90"
-                  value="45.123.789/0001-90"
-                >
+                <input type="text" id="pix-key-input" class="form-input" placeholder="Ex: 45.123.789/0001-90"
+                  value="45.123.789/0001-90">
                 <button type="button" id="btn-copy-pix" class="btn btn-primary btn-copy-pix" title="Copiar Chave PIX">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                   </svg>
@@ -497,9 +527,11 @@
 
               <!-- Botão Especial de PIX Copia e Cola com Valor -->
               <div class="pix-payload-special-wrapper">
-                <button type="button" id="btn-copy-pix-payload" class="btn-special-pix-payload" title="Copiar código PIX Copia e Cola completo no padrão oficial do Banco Central com valor total incluído para pagamento direto no app do banco">
+                <button type="button" id="btn-copy-pix-payload" class="btn-special-pix-payload"
+                  title="Copiar código PIX Copia e Cola completo no padrão oficial do Banco Central com valor total incluído para pagamento direto no app do banco">
                   <div class="special-pix-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                      stroke-linecap="round" stroke-linejoin="round">
                       <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                       <polyline points="13 15 16 12 13 9"></polyline>
@@ -507,13 +539,16 @@
                   </div>
                   <div class="special-pix-info">
                     <div class="special-pix-title-row">
-                      <span class="special-pix-title" id="copy-pix-payload-text">Copiar PIX Copia e Cola (com valor)</span>
+                      <span class="special-pix-title" id="copy-pix-payload-text">Copiar PIX Copia e Cola (com
+                        valor)</span>
                       <span class="special-pix-tag">Padrão Bancário</span>
                     </div>
-                    <span class="special-pix-subtitle" id="copy-pix-payload-sub">Gera o código oficial com o valor total pronto para o cliente colar no app do banco</span>
+                    <span class="special-pix-subtitle" id="copy-pix-payload-sub">Gera o código oficial com o valor total
+                      pronto para o cliente colar no app do banco</span>
                   </div>
                   <div class="special-pix-action-arrow">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                      stroke-linecap="round" stroke-linejoin="round">
                       <polyline points="9 18 15 12 9 6"></polyline>
                     </svg>
                   </div>
@@ -523,13 +558,8 @@
 
             <div class="form-group">
               <label for="pix-bank-input" class="form-label">Banco / Instituição / Titular</label>
-              <input 
-                type="text" 
-                id="pix-bank-input" 
-                class="form-input" 
-                placeholder="Ex: Banco Inter (Studio Digital Nexus MEI)"
-                value="Banco Inter (Studio Digital Nexus MEI)"
-              >
+              <input type="text" id="pix-bank-input" class="form-input"
+                placeholder="Ex: Banco Inter (Studio Digital Nexus MEI)" value="Banco Inter (Studio Digital Nexus MEI)">
             </div>
 
             <div class="checkbox-group">
@@ -558,11 +588,8 @@
             Observações, Prazos de Entrega & Garantia
             <span class="optional">Exibido no rodapé do documento</span>
           </label>
-          <textarea 
-            id="notes-input" 
-            class="form-textarea" 
-            placeholder="Exemplo:&#10;Condições: 50% de entrada e 50% na entrega.&#10;Prazo de execução: 15 dias úteis.&#10;Garantia de 90 dias após a entrega."
-          ></textarea>
+          <textarea id="notes-input" class="form-textarea"
+            placeholder="Exemplo:&#10;Condições: 50% de entrada e 50% na entrega.&#10;Prazo de execução: 15 dias úteis.&#10;Garantia de 90 dias após a entrega."></textarea>
         </div>
       </div>
 
@@ -570,8 +597,10 @@
       <div class="desktop-action-bar">
         <!-- Grupo Secundário (Esquerda): Formato & Compartilhamento -->
         <div class="action-bar-group action-bar-secondary">
-          <button type="button" id="btn-convert-mode" class="btn btn-outline btn-convert-doc" title="Converter este documento mantendo todos os dados">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" id="btn-convert-mode" class="btn btn-outline btn-convert-doc"
+            title="Converter este documento mantendo todos os dados">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <polyline points="23 4 23 10 17 10"></polyline>
               <polyline points="1 20 1 14 7 14"></polyline>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
@@ -579,9 +608,11 @@
             <span id="btn-convert-text">Virar Recibo</span>
           </button>
 
-          <button type="button" id="btn-whatsapp-share" class="btn btn-whatsapp" title="Compartilhar resumo pré-formatado no WhatsApp">
+          <button type="button" id="btn-whatsapp-share" class="btn btn-whatsapp"
+            title="Compartilhar resumo pré-formatado no WhatsApp">
             <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+              <path
+                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
             </svg>
             <span>WhatsApp</span>
           </button>
@@ -589,16 +620,20 @@
 
         <!-- Grupo Primário (Direita): Pré-visualização Nativa & Download Final -->
         <div class="action-bar-group action-bar-primary">
-          <button type="button" id="btn-preview-pdf" class="btn btn-outline btn-lg btn-preview-native" title="Abrir pré-visualização nativa para conferência">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" id="btn-preview-pdf" class="btn btn-outline btn-lg btn-preview-native"
+            title="Abrir pré-visualização nativa para conferência">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
               <circle cx="12" cy="12" r="3"></circle>
             </svg>
             <span id="btn-preview-text">Visualizar Orçamento</span>
           </button>
 
-          <button type="button" id="btn-generate-pdf" class="btn btn-success btn-lg btn-generate-primary" title="Baixar PDF diretamente">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" id="btn-generate-pdf" class="btn btn-success btn-lg btn-generate-primary"
+            title="Baixar PDF diretamente">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -615,7 +650,8 @@
          ======================================================================== -->
     <div class="institutional-section-header">
       <div class="institutional-header-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
         </svg>
         <span>Transparência &amp; Segurança</span>
@@ -634,7 +670,8 @@
         <!-- Coluna 1: Informações de Segurança, Privacidade & Funcionamento Local -->
         <div class="donation-info-col">
           <div class="security-badge">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             </svg>
             100% Gratuito &amp; Seguro • Sem Cadastro
@@ -642,42 +679,53 @@
 
           <h3 class="donation-title">Privacidade Absoluta e Execução 100% no seu Computador</h3>
           <p class="donation-desc">
-            O <strong>PDFaz</strong> foi desenvolvido para assegurar total autonomia aos prestadores de serviços e MEIs. Ao utilizar esta ferramenta, todo o processamento dos cálculos e a geração do documento PDF ocorrem <strong>diretamente no seu navegador</strong>, de forma estritamente local e sem intermediários na internet.
+            O <strong>PDFaz</strong> foi desenvolvido para assegurar total autonomia aos prestadores de serviços e MEIs.
+            Ao utilizar esta ferramenta, todo o processamento dos cálculos e a geração do documento PDF ocorrem
+            <strong>diretamente no seu navegador</strong>, de forma estritamente local e sem intermediários na internet.
           </p>
 
           <div class="security-features-list">
             <div class="feature-item">
               <div class="feature-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
               </div>
               <div class="feature-text">
-                <strong>Sigilo Total dos Dados:</strong> Nenhum dado digitado (clientes, valores, serviços ou documentos) é transmitido para servidores web externos. Seus dados permanecem seguros na sua máquina.
+                <strong>Sigilo Total dos Dados:</strong> Nenhum dado digitado (clientes, valores, serviços ou
+                documentos) é transmitido para servidores web externos. Seus dados permanecem seguros na sua máquina.
               </div>
             </div>
 
             <div class="feature-item">
               <div class="feature-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
               </div>
               <div class="feature-text">
-                <strong>Sem Login e Sem Cadastro:</strong> Não exigimos criação de contas, senhas ou e-mails de acesso. É só abrir o aplicativo e produzir orçamentos e recibos imediatamente.
+                <strong>Sem Login e Sem Cadastro:</strong> Não exigimos criação de contas, senhas ou e-mails de acesso.
+                É só abrir o aplicativo e produzir orçamentos e recibos imediatamente.
               </div>
             </div>
 
             <div class="feature-item">
               <div class="feature-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                  </path>
                 </svg>
               </div>
               <div class="feature-text">
-                <strong>Apoie a Evolução do Projeto:</strong> O PDFaz é gratuito e independente. Se esta ferramenta gera valor e economiza seu tempo, considere contribuir com qualquer quantia via PIX para apoiar novas atualizações e funcionalidades!
+                <strong>Apoie a Evolução do Projeto:</strong> O PDFaz é gratuito e independente. Se esta ferramenta gera
+                valor e economiza seu tempo, considere contribuir com qualquer quantia via PIX para apoiar novas
+                atualizações e funcionalidades!
               </div>
             </div>
           </div>
@@ -700,16 +748,20 @@
             </div>
 
             <div class="donation-buttons-group">
-              <button type="button" id="btn-copy-donation-pix" class="btn btn-primary btn-copy-donation" title="Copiar Chave PIX (E-mail)">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <button type="button" id="btn-copy-donation-pix" class="btn btn-primary btn-copy-donation"
+                title="Copiar Chave PIX (E-mail)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                 </svg>
                 <span id="copy-donation-text">Copiar Chave PIX</span>
               </button>
 
-              <button type="button" id="btn-copy-donation-payload" class="btn btn-outline btn-copy-donation" title="Copiar Código PIX Copia e Cola">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <button type="button" id="btn-copy-donation-payload" class="btn btn-outline btn-copy-donation"
+                title="Copiar Código PIX Copia e Cola">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="16 18 22 12 16 6"></polyline>
                   <polyline points="8 6 2 12 8 18"></polyline>
                 </svg>
@@ -731,7 +783,8 @@
           <div class="footer-brand-pane">
             <div class="footer-brand-header">
               <div class="footer-brand-logo">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                   <polyline points="14 2 14 8 20 8"></polyline>
                   <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -749,14 +802,16 @@
               </span>
             </div>
             <p class="footer-mission-text">
-              Plataforma independente criada para dar agilidade, formalidade e autonomia diária aos prestadores de serviços, autônomos e microempreendedores individuais (MEIs) de todo o Brasil.
+              Plataforma independente criada para dar agilidade, formalidade e autonomia diária aos prestadores de
+              serviços, autônomos e microempreendedores individuais (MEIs) de todo o Brasil.
             </p>
           </div>
 
           <div class="footer-security-pane">
             <div class="footer-sec-card">
               <div class="footer-sec-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
@@ -764,7 +819,8 @@
               <div class="footer-sec-content">
                 <span class="footer-sec-title">Privacidade por Design (Privacy by Design)</span>
                 <span class="footer-sec-desc">
-                  Nenhum dado digitado é enviado para servidores web. Cálculos e geração do PDF ocorrem estritamente na memória do seu navegador.
+                  Nenhum dado digitado é enviado para servidores web. Cálculos e geração do PDF ocorrem estritamente na
+                  memória do seu navegador.
                 </span>
               </div>
             </div>
@@ -775,7 +831,8 @@
         <div class="footer-legal-hub">
           <div class="footer-legal-hub-header">
             <div class="footer-legal-tag">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
               </svg>
               <span>Documentação Legal &amp; Proteção de Dados</span>
@@ -785,16 +842,19 @@
 
           <div class="footer-cards-grid">
             <!-- Card 1: Política de Privacidade -->
-            <a href="politica-privacidade" target="_blank" rel="noopener noreferrer" class="footer-legal-card" title="Abrir Política de Privacidade em nova aba">
+            <a href="politica-privacidade" target="_blank" rel="noopener noreferrer" class="footer-legal-card"
+              title="Abrir Política de Privacidade em nova aba">
               <div class="legal-card-icon legal-icon-privacy">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 </svg>
               </div>
               <div class="legal-card-info">
                 <div class="legal-card-title-row">
                   <span class="legal-card-title">Política de Privacidade</span>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="legal-card-arrow">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="legal-card-arrow">
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                     <polyline points="15 3 21 3 21 9"></polyline>
                     <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -805,9 +865,11 @@
             </a>
 
             <!-- Card 2: Termos de Uso -->
-            <a href="termos-de-uso" target="_blank" rel="noopener noreferrer" class="footer-legal-card" title="Abrir Termos de Uso em nova aba">
+            <a href="termos-de-uso" target="_blank" rel="noopener noreferrer" class="footer-legal-card"
+              title="Abrir Termos de Uso em nova aba">
               <div class="legal-card-icon legal-icon-terms">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                   <polyline points="14 2 14 8 20 8"></polyline>
                   <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -818,7 +880,8 @@
               <div class="legal-card-info">
                 <div class="legal-card-title-row">
                   <span class="legal-card-title">Termos de Uso</span>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="legal-card-arrow">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="legal-card-arrow">
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                     <polyline points="15 3 21 3 21 9"></polyline>
                     <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -829,16 +892,21 @@
             </a>
 
             <!-- Card 3: Conformidade LGPD -->
-            <a href="lgpd" target="_blank" rel="noopener noreferrer" class="footer-legal-card legal-card-highlight-lgpd" title="Abrir Conformidade LGPD e Direitos do Titular em nova aba">
+            <a href="lgpd" target="_blank" rel="noopener noreferrer" class="footer-legal-card legal-card-highlight-lgpd"
+              title="Abrir Conformidade LGPD e Direitos do Titular em nova aba">
               <div class="legal-card-icon legal-icon-lgpd">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                  </path>
                 </svg>
               </div>
               <div class="legal-card-info">
                 <div class="legal-card-title-row">
                   <span class="legal-card-title">Conformidade LGPD</span>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="legal-card-arrow">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="legal-card-arrow">
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                     <polyline points="15 3 21 3 21 9"></polyline>
                     <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -849,10 +917,14 @@
             </a>
 
             <!-- Card 4: Avaliar PDFaz (Botão da Pesquisa) -->
-            <button type="button" id="btn-open-survey" class="footer-legal-card legal-card-survey" title="Avaliar o aplicativo e enviar sugestões">
+            <button type="button" id="btn-open-survey" class="footer-legal-card legal-card-survey"
+              title="Avaliar o aplicativo e enviar sugestões">
               <div class="legal-card-icon legal-icon-survey">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#F59E0B" stroke="#D97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#F59E0B" stroke="#D97706" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                  </polygon>
                 </svg>
               </div>
               <div class="legal-card-info">
@@ -894,19 +966,24 @@
       <span class="value" id="mobile-total-display">R$ 0,00</span>
     </div>
     <div class="mobile-action-buttons">
-      <button type="button" id="btn-preview-pdf-mobile" class="btn btn-outline btn-sm btn-icon-only btn-preview-mobile" title="Visualizar documento antes de baixar">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <button type="button" id="btn-preview-pdf-mobile" class="btn btn-outline btn-sm btn-icon-only btn-preview-mobile"
+        title="Visualizar documento antes de baixar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
           <circle cx="12" cy="12" r="3"></circle>
         </svg>
       </button>
-      <button type="button" id="btn-whatsapp-mobile" class="btn btn-whatsapp btn-sm btn-icon-only" title="Compartilhar no WhatsApp">
+      <button type="button" id="btn-whatsapp-mobile" class="btn btn-whatsapp btn-sm btn-icon-only"
+        title="Compartilhar no WhatsApp">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+          <path
+            d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
         </svg>
       </button>
       <button type="button" id="btn-generate-pdf-mobile" class="btn btn-success btn-generate-mobile">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
           <polyline points="7 10 12 15 17 10"></polyline>
           <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -919,13 +996,15 @@
   <!-- ========================================================================
        Visualizador Nativo de PDF (In-App Preview, Conferência e Decisão)
        ======================================================================== -->
-  <div id="native-pdf-modal" class="native-pdf-modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="native-pdf-modal-title">
+  <div id="native-pdf-modal" class="native-pdf-modal-overlay" aria-hidden="true" role="dialog"
+    aria-labelledby="native-pdf-modal-title">
     <div class="native-pdf-modal-container">
       <!-- Header do Visualizador Nativo -->
       <header class="native-pdf-modal-header">
         <div class="native-pdf-header-left">
           <div class="native-pdf-icon-badge">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
               <polyline points="14 2 14 8 20 8"></polyline>
               <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -937,13 +1016,16 @@
               <h3 id="native-pdf-modal-title" class="native-pdf-title">Pré-visualização do Documento</h3>
               <span id="native-pdf-doc-badge" class="native-pdf-badge orcamento">Orçamento #001</span>
             </div>
-            <span class="native-pdf-subtitle">Confira o documento antes de emitir. Aprove para baixar agora ou descarte se quiser ajustar algo.</span>
+            <span class="native-pdf-subtitle">Confira o documento antes de emitir. Aprove para baixar agora ou descarte
+              se quiser ajustar algo.</span>
           </div>
         </div>
 
         <div class="native-pdf-header-actions">
-          <button type="button" id="btn-open-raw-pdf" class="btn btn-outline btn-sm btn-raw-pdf" title="Abrir arquivo PDF original em nova aba">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" id="btn-open-raw-pdf" class="btn btn-outline btn-sm btn-raw-pdf"
+            title="Abrir arquivo PDF original em nova aba">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
               <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -951,8 +1033,10 @@
             <span>PDF Externo</span>
           </button>
 
-          <button type="button" id="btn-close-pdf-modal-x" class="btn-native-modal-close" aria-label="Fechar visualizador" title="Descartar e Voltar (Esc)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" id="btn-close-pdf-modal-x" class="btn-native-modal-close"
+            aria-label="Fechar visualizador" title="Descartar e Voltar (Esc)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
@@ -970,8 +1054,10 @@
       <!-- Barra Inferior de Decisão: Descartar / Ajustar vs Aprovar & Baixar -->
       <footer class="native-pdf-modal-footer">
         <div class="native-pdf-footer-left">
-          <button type="button" id="btn-pdf-modal-discard" class="btn btn-outline btn-discard-preview" title="Fechar visualização sem baixar e voltar para a edição">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" id="btn-pdf-modal-discard" class="btn btn-outline btn-discard-preview"
+            title="Fechar visualização sem baixar e voltar para a edição">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
@@ -980,15 +1066,19 @@
         </div>
 
         <div class="native-pdf-footer-right">
-          <button type="button" id="btn-pdf-modal-whatsapp" class="btn btn-whatsapp" title="Compartilhar resumo no WhatsApp">
+          <button type="button" id="btn-pdf-modal-whatsapp" class="btn btn-whatsapp"
+            title="Compartilhar resumo no WhatsApp">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+              <path
+                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
             </svg>
             <span>WhatsApp</span>
           </button>
 
-          <button type="button" id="btn-pdf-modal-approve-download" class="btn btn-success btn-approve-download" title="Aprovar e baixar o PDF oficial agora">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" id="btn-pdf-modal-approve-download" class="btn btn-success btn-approve-download"
+            title="Aprovar e baixar o PDF oficial agora">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -1008,13 +1098,18 @@
       <!-- Cabeçalho da Pesquisa -->
       <div class="survey-header">
         <div class="survey-badge">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="#D97706" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+            </polygon>
           </svg>
           <span id="survey-title">Sua Opinião Importa</span>
         </div>
-        <button type="button" id="survey-btn-close" class="survey-close-btn" aria-label="Fechar pesquisa" title="Fechar">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <button type="button" id="survey-btn-close" class="survey-close-btn" aria-label="Fechar pesquisa"
+          title="Fechar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -1032,21 +1127,42 @@
           <label class="survey-label">
             1. Este aplicativo foi útil para você? <span class="required">*</span>
           </label>
-          <div class="survey-stars-wrapper" id="survey-stars-group" role="radiogroup" aria-label="Avaliação de 1 a 5 estrelas">
+          <div class="survey-stars-wrapper" id="survey-stars-group" role="radiogroup"
+            aria-label="Avaliação de 1 a 5 estrelas">
             <button type="button" class="survey-star" data-rating="1" aria-label="1 estrela - Pouco útil">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                </polygon>
+              </svg>
             </button>
             <button type="button" class="survey-star" data-rating="2" aria-label="2 estrelas - Razoável">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                </polygon>
+              </svg>
             </button>
             <button type="button" class="survey-star" data-rating="3" aria-label="3 estrelas - Útil">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                </polygon>
+              </svg>
             </button>
             <button type="button" class="survey-star" data-rating="4" aria-label="4 estrelas - Muito bom">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                </polygon>
+              </svg>
             </button>
             <button type="button" class="survey-star" data-rating="5" aria-label="5 estrelas - Excelente">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                </polygon>
+              </svg>
             </button>
           </div>
           <div class="survey-rating-feedback" id="survey-rating-text">Clique para selecionar de 1 a 5 estrelas</div>
@@ -1076,12 +1192,8 @@
             3. Existe algum recurso que você sentiu falta?
             <span class="optional">(opcional)</span>
           </label>
-          <textarea 
-            id="survey-feature-suggestion" 
-            class="form-textarea survey-textarea" 
-            rows="2" 
-            placeholder="Ex: mais opções de cores, logo da empresa, formas de parcelamento..."
-          ></textarea>
+          <textarea id="survey-feature-suggestion" class="form-textarea survey-textarea" rows="2"
+            placeholder="Ex: mais opções de cores, logo da empresa, formas de parcelamento..."></textarea>
         </div>
 
         <!-- Botões de Ação -->
@@ -1090,7 +1202,8 @@
             Agora não
           </button>
           <button type="button" id="survey-btn-submit" class="btn btn-primary btn-sm survey-btn-submit" disabled>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
               <line x1="22" y1="2" x2="11" y2="13"></line>
               <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
             </svg>
@@ -1102,16 +1215,19 @@
       <!-- Estado de Sucesso pós-envio -->
       <div id="survey-success-card" class="survey-success-card" style="display: none;">
         <div class="survey-success-icon">
-          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
         </div>
         <h4 class="survey-success-title">Muito obrigado pelo seu feedback!</h4>
         <p class="survey-success-desc">
-          Sua avaliação ajuda diretamente na evolução contínua do PDFaz.com.br para toda a comunidade de MEIs e autônomos.
+          Sua avaliação ajuda diretamente na evolução contínua do PDFaz.com.br para toda a comunidade de MEIs e
+          autônomos.
         </p>
-        <button type="button" id="survey-btn-close-success" class="btn btn-primary btn-sm" style="margin-top: 14px; width: 100%;">
+        <button type="button" id="survey-btn-close-success" class="btn btn-primary btn-sm"
+          style="margin-top: 14px; width: 100%;">
           Concluir
         </button>
       </div>
@@ -1122,4 +1238,5 @@
   <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
 </body>
+
 </html>

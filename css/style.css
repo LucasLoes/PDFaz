@@ -2911,6 +2911,11 @@ body.mode-recibo .discount-toggle-btn.active {
   flex-shrink: 0;
 }
 
+.footer-brand-logo svg {
+  color: #FFFFFF;
+  stroke: #FFFFFF;
+}
+
 .footer-brand-text {
   display: flex;
   flex-direction: column;
