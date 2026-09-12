@@ -969,7 +969,7 @@
     if (btnGenMobile) {
       let spanMob = document.getElementById('btn-generate-mobile-text') || btnGenMobile.querySelector('span');
       if (spanMob) {
-        spanMob.textContent = downloadLabel;
+        spanMob.innerHTML = `<span class="btn-text-main">Baixar</span> <span class="btn-text-doc">${isRecibo ? 'Recibo' : 'Orçamento'}</span>`;
       } else {
         btnGenMobile.innerHTML = `
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -977,7 +977,7 @@
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-          <span id="btn-generate-mobile-text">${downloadLabel}</span>
+          <span id="btn-generate-mobile-text"><span class="btn-text-main">Baixar</span> <span class="btn-text-doc">${isRecibo ? 'Recibo' : 'Orçamento'}</span></span>
         `;
       }
     }
@@ -1041,7 +1041,7 @@
         dom.totalStatusPill.style.backgroundColor = '#DBEAFE';
         dom.totalStatusPill.style.color = '#1D4ED8';
       }
-      if (dom.mobileTotalLabel) dom.mobileTotalLabel.textContent = 'Total Orçamento';
+      if (dom.mobileTotalLabel) dom.mobileTotalLabel.innerHTML = '<span class="mobile-total-title">Total</span> <span class="mobile-total-type">Orçamento</span>';
       if (dom.btnConvertText) dom.btnConvertText.textContent = 'Virar Recibo';
 
       document.body.classList.remove('mode-recibo');
@@ -1074,7 +1074,7 @@
         dom.totalStatusPill.style.backgroundColor = '#D1FAE5';
         dom.totalStatusPill.style.color = '#065F46';
       }
-      if (dom.mobileTotalLabel) dom.mobileTotalLabel.textContent = 'Total Quitado';
+      if (dom.mobileTotalLabel) dom.mobileTotalLabel.innerHTML = '<span class="mobile-total-title">Total</span> <span class="mobile-total-type">Quitado</span>';
       if (dom.btnConvertText) dom.btnConvertText.textContent = 'Virar Orçamento';
 
       document.body.classList.add('mode-recibo');

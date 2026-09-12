@@ -205,6 +205,91 @@ body {
   }
 }
 
+/* Responsividade do Cabeçalho para Telas Mobile */
+@media (max-width: 640px) {
+  .header-inner {
+    padding: 9px 14px;
+    gap: 8px;
+  }
+
+  .brand {
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+  }
+
+  .brand-icon svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .brand-title {
+    font-size: 1.15rem;
+  }
+
+  .brand-subtitle {
+    display: none; /* Oculta o subtítulo no mobile para não espremer as ações */
+  }
+
+  .header-actions {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  /* Botão Instalar App compacto */
+  .btn-install-app {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    gap: 4px;
+    min-height: 34px;
+    height: 34px;
+  }
+
+  .btn-install-app .btn-text-extra {
+    display: none; /* Exibe apenas "Instalar" */
+  }
+
+  /* Botões Exemplo e Limpar convertidos em botões de ícones elegantes */
+  .btn-header-action {
+    padding: 6px;
+    min-width: 34px;
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+  }
+
+  .btn-header-label {
+    display: none; /* Oculta textos "Exemplo" e "Limpar" no mobile */
+  }
+}
+
+@media (max-width: 380px) {
+  .header-inner {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .btn-install-app {
+    padding: 6px;
+    min-width: 34px;
+    width: 34px;
+    justify-content: center;
+  }
+
+  .btn-install-app .btn-text-main {
+    display: none; /* No mobile super estreito, exibe ícone de download */
+  }
+}
+
 /* ==========================================================================
    Hero & Badges
    ========================================================================== */
@@ -859,6 +944,19 @@ body.mode-recibo .doc-type-card-btn#btn-type-recibo.active .doc-card-check {
   border: 1px solid var(--border-color);
 }
 
+@media (max-width: 640px) {
+  .add-item-hint {
+    display: none;
+  }
+  .add-item-action {
+    justify-content: center;
+  }
+  .btn-add-item-modern {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* ==========================================================================
    Resumo Financeiro Executivo (Totais & Desconto Flexível)
    ========================================================================== */
@@ -1122,9 +1220,74 @@ body.mode-recibo .summary-total-box .total-value {
   line-height: 1.1;
 }
 
+.mobile-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-action-bar .btn-icon-only {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+}
+
 .mobile-action-bar .btn-generate-mobile {
   flex: 1;
   max-width: 220px;
+  min-height: 40px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .mobile-action-bar {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .mobile-action-bar .mobile-total-info .label {
+    font-size: 0.68rem;
+  }
+
+  .mobile-action-bar .mobile-total-info .value {
+    font-size: 1.05rem;
+  }
+
+  .mobile-action-bar .mobile-total-info .mobile-total-type {
+    display: none; /* Oculta a palavra "Orçamento" / "Quitado" mantendo apenas "Total" */
+  }
+
+  .mobile-action-bar .btn-generate-mobile .btn-text-doc {
+    display: none; /* No mobile compacto, exibe apenas "Baixar" */
+  }
+
+  .mobile-action-bar .btn-generate-mobile {
+    padding: 8px 12px;
+    font-size: 0.84rem;
+  }
+
+  .mobile-action-buttons {
+    gap: 6px;
+  }
+
+  .mobile-action-bar .btn-icon-only {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -3312,18 +3475,139 @@ body.mode-recibo .discount-toggle-btn.active {
 
 @media (max-width: 680px) {
   .site-footer {
-    padding: 24px 16px 20px;
+    padding: 22px 16px 20px;
+    margin-top: 32px;
+  }
+
+  .footer-container {
+    gap: 20px;
+  }
+
+  .footer-main-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    padding-bottom: 18px;
+  }
+
+  .footer-brand-pane {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  .footer-brand-header {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .footer-brand-text {
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-mission-text {
+    text-align: center;
+    font-size: 0.76rem;
+    line-height: 1.45;
+    max-width: 480px;
+    margin: 8px auto 0;
+  }
+
+  .footer-security-pane {
+    width: 100%;
+  }
+
+  .footer-sec-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    padding: 14px 16px;
+  }
+
+  .footer-sec-content {
+    text-align: center;
+  }
+
+  .footer-sec-desc {
+    font-size: 0.74rem;
+    line-height: 1.4;
+  }
+
+  .footer-legal-hub-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+
+  .footer-legal-tag {
+    justify-content: center;
+  }
+
+  .footer-legal-compliance {
+    text-align: center;
+    font-size: 0.70rem;
   }
 
   .footer-cards-grid {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
+  }
+
+  .footer-legal-card {
+    padding: 12px 14px;
   }
 
   .footer-bottom-bar {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     gap: 10px;
+    padding-top: 16px;
+  }
+
+  .footer-copyright-text {
+    text-align: center;
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+
+  .footer-copyright-text .footer-dot-sep {
+    display: none;
+  }
+
+  .footer-tech-badges {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 440px) {
+  .site-footer {
+    padding: 18px 12px 16px;
+    margin-top: 24px;
+    border-radius: var(--radius-lg);
+  }
+
+  .footer-container {
+    gap: 16px;
+  }
+
+  .footer-legal-card {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .footer-tech-badges .tech-tag:first-child {
+    display: none; /* No mobile estreito, oculta tag redundante para máxima leveza */
   }
 }
 
@@ -3389,6 +3673,25 @@ body.mode-recibo .discount-toggle-btn.active {
   background-color: #DBEAFE;
   color: var(--primary-hover);
   transform: translateX(-2px);
+}
+
+@media (max-width: 480px) {
+  .btn-back-app {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .btn-back-app span {
+    display: none;
+  }
+  .btn-back-app {
+    padding: 6px;
+    width: 34px;
+    height: 34px;
+    justify-content: center;
+  }
 }
 
 /* Hero Legal */
