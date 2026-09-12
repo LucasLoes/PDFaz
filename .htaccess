@@ -6,6 +6,16 @@ RewriteCond %{REQUEST_FILENAME}\.html -f
 RewriteRule ^(.*)$ $1.html [L]
 
 # =========================================================================
+# Tipos MIME para PWA, SVG e Imagens
+# =========================================================================
+<IfModule mod_mime.c>
+  AddType image/svg+xml .svg .svgz
+  AddType application/manifest+json .webmanifest .json
+  AddType image/png .png
+  AddType image/webp .webp
+</IfModule>
+
+# =========================================================================
 # Cabeçalhos HTTP de Segurança Avançada
 # =========================================================================
 <IfModule mod_headers.c>

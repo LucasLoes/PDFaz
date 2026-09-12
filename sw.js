@@ -1,9 +1,9 @@
 /**
  * PDFaz - Service Worker para Funcionamento 100% Offline & PWA
- * Versão do Cache: v2.2.0
+ * Versão do Cache: v2.3.0
  */
 
-const CACHE_NAME = 'pdfaz-pwa-v2.2.0';
+const CACHE_NAME = 'pdfaz-pwa-v2.3.0';
 
 // Arquivos e bibliotecas para pré-cache obrigatório (apenas URLs canônicas)
 const PRECACHE_ASSETS = [
@@ -19,6 +19,10 @@ const PRECACHE_ASSETS = [
   './icons/icon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',
+  './icons/icon-maskable-192.png',
+  './icons/icon-maskable-512.png',
+  './icons/screenshot-desktop.png',
+  './icons/screenshot-mobile.png',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js',
