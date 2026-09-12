@@ -1,9 +1,9 @@
 /**
  * PDFaz - Service Worker para Funcionamento 100% Offline & PWA
- * Versão do Cache: v2.1.0
+ * Versão do Cache: v2.2.0
  */
 
-const CACHE_NAME = 'pdfaz-pwa-v2.1.0';
+const CACHE_NAME = 'pdfaz-pwa-v2.2.0';
 
 // Arquivos e bibliotecas para pré-cache obrigatório (apenas URLs canônicas)
 const PRECACHE_ASSETS = [
@@ -14,6 +14,7 @@ const PRECACHE_ASSETS = [
   './lgpd',
   './css/style.css',
   './js/app.js',
+  './js/sw-register.js',
   './manifest.json',
   './icons/icon.svg',
   './icons/icon-192.png',
@@ -21,7 +22,7 @@ const PRECACHE_ASSETS = [
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap'
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
 ];
 
 // Instalação do Service Worker & Pré-cache
@@ -64,6 +65,18 @@ self.addEventListener('fetch', event => {
 
   const url = new URL(event.request.url);
 
+  // CDNs e fontes externas permitidas
+  const isCdn = url.hostname.includes('cdnjs.cloudflare.com') || 
+                url.hostname.includes('fonts.googleapis.com') || 
+                url.hostname.includes('fonts.gstatic.com');
+
+  const isOurOrigin = url.origin === self.location.origin;
+
+  // Se não for da nossa origem e não for um CDN do PDFaz, não intercepta (ex: extensões, antivírus local, etc.)
+  if (!isOurOrigin && !isCdn) {
+    return;
+  }
+
   // 1. Navegação de páginas HTML: Network-First com fallback para cache offline
   // Isso garante que novos deploys e URLs limpas sejam carregados imediatamente
   if (event.request.mode === 'navigate') {
@@ -88,9 +101,6 @@ self.addEventListener('fetch', event => {
   }
 
   // 2. CDNs e fontes externas: Cache-First
-  const isCdn = url.hostname.includes('cdnjs.cloudflare.com') || 
-                url.hostname.includes('fonts.googleapis.com') || 
-                url.hostname.includes('fonts.gstatic.com');
 
   if (isCdn) {
     event.respondWith(
