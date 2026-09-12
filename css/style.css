@@ -2102,13 +2102,13 @@ body.mode-recibo .btn-raw-pdf:hover {
 }
 
 .site-footer a {
-  color: var(--primary);
+  color: inherit;
   text-decoration: none;
   font-weight: 500;
 }
 
 .site-footer a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* ==========================================================================
@@ -3067,7 +3067,8 @@ body.mode-recibo .discount-toggle-btn.active {
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
   border-radius: var(--radius-lg);
-  text-decoration: none;
+  text-decoration: none !important;
+  color: inherit;
   cursor: pointer;
   text-align: left;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -3077,11 +3078,20 @@ body.mode-recibo .discount-toggle-btn.active {
   min-width: 0;
 }
 
-.footer-legal-card:hover {
+.footer-legal-card:hover,
+.footer-legal-card:focus,
+.footer-legal-card:active {
   background: #FFFFFF;
   border-color: #BFDBFE;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+  text-decoration: none !important;
+  color: inherit;
+}
+
+.footer-legal-card *,
+.footer-legal-card:hover * {
+  text-decoration: none !important;
 }
 
 .legal-card-icon {
@@ -3141,6 +3151,12 @@ body.mode-recibo .discount-toggle-btn.active {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none !important;
+}
+
+.footer-legal-card:hover .legal-card-title {
+  color: #2563EB;
+  text-decoration: none !important;
 }
 
 .legal-card-arrow {
@@ -3154,13 +3170,15 @@ body.mode-recibo .discount-toggle-btn.active {
   transform: translate(2px, -2px);
 }
 
-.legal-card-sub {
+.legal-card-sub,
+.footer-legal-card:hover .legal-card-sub {
   font-size: 0.70rem;
   color: var(--text-muted);
   line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none !important;
 }
 
 /* Card LGPD Highlight */
