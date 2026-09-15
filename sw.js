@@ -1,9 +1,9 @@
 /**
  * PDFaz - Service Worker para Funcionamento 100% Offline & PWA
- * Versão do Cache: v2.3.0
+ * Versão do Cache: v2.3.1
  */
 
-const CACHE_NAME = 'pdfaz-pwa-v2.3.0';
+const CACHE_NAME = 'pdfaz-pwa-v2.3.1';
 
 // Arquivos e bibliotecas para pré-cache obrigatório (apenas URLs canônicas)
 const PRECACHE_ASSETS = [
