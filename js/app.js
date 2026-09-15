@@ -1779,8 +1779,8 @@
         try {
           const tempImg = new Image();
           tempImg.src = state.logoDataUrl;
-          const logoMaxH = 16;
-          const logoMaxW = 60;
+          const logoMaxH = 18;
+          const logoMaxW = 65;
           const imgW = tempImg.naturalWidth || 200;
           const imgH = tempImg.naturalHeight || 80;
           const ratio = Math.min(logoMaxW / imgW, logoMaxH / imgH, 1);
@@ -1790,8 +1790,8 @@
           const logoY = 10;
           doc.addImage(state.logoDataUrl, 'PNG', marginX, logoY, finalLogoW, finalLogoH);
 
-          // Nome da empresa / emissor logo abaixo da logo, alinhado à esquerda
-          const brandY = logoY + finalLogoH + 4.5;
+          // Espaço destinado e respiro elegante entre o logotipo e a razão social
+          const brandY = logoY + finalLogoH + 8;
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(13);
           doc.setTextColor(30, 41, 59);
@@ -1803,9 +1803,9 @@
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(8.5);
           doc.setTextColor(100, 116, 139);
-          doc.text('Proposta Comercial & Orçamento de Prestação de Serviços', marginX, brandY + 4.5);
+          doc.text('Proposta Comercial & Orçamento de Prestação de Serviços', marginX, brandY + 4.8);
 
-          headerLeftEndY = brandY + 4.5;
+          headerLeftEndY = brandY + 4.8;
         } catch(e) {
           console.warn('Erro ao inserir logo no PDF:', e);
         }
@@ -2117,8 +2117,8 @@
         try {
           const tempImg2 = new Image();
           tempImg2.src = state.logoDataUrl;
-          const logoMaxH = 16;
-          const logoMaxW = 60;
+          const logoMaxH = 18;
+          const logoMaxW = 65;
           const imgW2 = tempImg2.naturalWidth || 200;
           const imgH2 = tempImg2.naturalHeight || 80;
           const ratio2 = Math.min(logoMaxW / imgW2, logoMaxH / imgH2, 1);
@@ -2128,8 +2128,8 @@
           const logoYR = 10;
           doc.addImage(state.logoDataUrl, 'PNG', marginX, logoYR, finalLogoW2, finalLogoH2);
 
-          // Nome da empresa / recebedor logo abaixo da logo, alinhado à esquerda
-          const brandYR = logoYR + finalLogoH2 + 4.5;
+          // Espaço destinado e respiro elegante entre o logotipo e a razão social
+          const brandYR = logoYR + finalLogoH2 + 8;
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(13);
           doc.setTextColor(30, 41, 59);
@@ -2141,9 +2141,9 @@
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(8.5);
           doc.setTextColor(...themeP);
-          doc.text('Comprovante Oficial de Pagamento e Quitação', marginX, brandYR + 4.5);
+          doc.text('Comprovante Oficial de Pagamento e Quitação', marginX, brandYR + 4.8);
 
-          headerLeftEndYR = brandYR + 4.5;
+          headerLeftEndYR = brandYR + 4.8;
         } catch(e) {
           console.warn('Erro ao inserir logo no recibo:', e);
         }
@@ -2524,9 +2524,11 @@
     const themeHex = '#' + (theme.primary || [37, 99, 235]).map(c => c.toString(16).padStart(2, '0')).join('');
     const themeSecHex = '#' + (theme.secondary || [30, 41, 59]).map(c => c.toString(16).padStart(2, '0')).join('');
 
-    // Logo HTML
+    // Logo HTML com espaço dedicado e respiro
     const logoHtml = state.logoDataUrl
-      ? `<img src="${state.logoDataUrl}" alt="Logomarca" class="a4-logo-img" style="max-height:60px; max-width:200px; object-fit:contain; display:block; margin-bottom:6px;">`
+      ? `<div class="a4-logo-container" style="max-width:220px; max-height:65px; margin-bottom:12px; display:flex; align-items:center;">
+           <img src="${state.logoDataUrl}" alt="Logotipo" class="a4-logo-img" style="max-height:60px; max-width:220px; object-fit:contain; display:block;">
+         </div>`
       : '';
 
     const emitterName = escapeHtml(state.emitterName || 'Prestador não informado');

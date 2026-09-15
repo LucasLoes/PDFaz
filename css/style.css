@@ -4693,6 +4693,14 @@ body.mode-recibo .discount-toggle-btn.active {
   gap: 4px;
 }
 
+.a4-logo-container {
+  max-width: 220px;
+  max-height: 65px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 480px) {
   .models-grid {
     grid-template-columns: 1fr 1fr;
