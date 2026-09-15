@@ -1772,49 +1772,64 @@
       // 1. Barra Superior com cor do tema
       doc.setFillColor(...themeP);
       doc.rect(0, 0, pageWidth, 5, 'F');
-      currentY = 16;
+      // 2. Cabeçalho Principal (Esquerda: Logo -> Nome da Empresa -> Subtítulo empilhados à esquerda)
+      let headerLeftEndY = 16;
 
-      // 2. Cabeçalho Principal
-      // Logo (se disponível)
-      let logoEndX = marginX;
-      let headerTextY = currentY;
       if (state.logoDataUrl) {
         try {
-          // Calcula dimensão proporcional: altura máx 18mm
           const tempImg = new Image();
           tempImg.src = state.logoDataUrl;
-          const logoMaxH = 18;
-          const logoMaxW = 55;
+          const logoMaxH = 16;
+          const logoMaxW = 60;
           const imgW = tempImg.naturalWidth || 200;
           const imgH = tempImg.naturalHeight || 80;
           const ratio = Math.min(logoMaxW / imgW, logoMaxH / imgH, 1);
           const finalLogoW = Math.max(10, imgW * ratio);
           const finalLogoH = Math.max(5, imgH * ratio);
-          doc.addImage(state.logoDataUrl, 'PNG', marginX, currentY - 8, finalLogoW, finalLogoH);
-          logoEndX = marginX + finalLogoW + 5;
-          headerTextY = currentY + 2;
+
+          const logoY = 10;
+          doc.addImage(state.logoDataUrl, 'PNG', marginX, logoY, finalLogoW, finalLogoH);
+
+          // Nome da empresa / emissor logo abaixo da logo, alinhado à esquerda
+          const brandY = logoY + finalLogoH + 4.5;
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(13);
+          doc.setTextColor(30, 41, 59);
+          const headerBrandText = state.emitterName ? state.emitterName.toUpperCase() : 'PDFaz';
+          const brandLines = doc.splitTextToSize(headerBrandText, 115);
+          doc.text(brandLines[0], marginX, brandY);
+
+          // Subtítulo logo abaixo do nome do emissor, alinhado à esquerda
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8.5);
+          doc.setTextColor(100, 116, 139);
+          doc.text('Proposta Comercial & Orçamento de Prestação de Serviços', marginX, brandY + 4.5);
+
+          headerLeftEndY = brandY + 4.5;
         } catch(e) {
           console.warn('Erro ao inserir logo no PDF:', e);
         }
+      } else {
+        const brandY = 16;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.setTextColor(30, 41, 59);
+        const headerBrandText = state.emitterName ? state.emitterName.toUpperCase() : 'PDFaz';
+        doc.text(headerBrandText, marginX, brandY);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(100, 116, 139);
+        doc.text('Proposta Comercial & Orçamento de Prestação de Serviços', marginX, brandY + 5);
+
+        headerLeftEndY = brandY + 5;
       }
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(state.logoDataUrl ? 14 : 18);
-      doc.setTextColor(30, 41, 59);
-
-      const headerBrandText = state.emitterName ? state.emitterName.toUpperCase() : 'PDFaz';
-      doc.text(headerBrandText, logoEndX, headerTextY);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8.5);
-      doc.setTextColor(100, 116, 139);
-      doc.text('Proposta Comercial & Orçamento de Prestação de Serviços', logoEndX, headerTextY + 5);
-
-      // Badge: ORÇAMENTO COMERCIAL
+      // Direita: Badge ORÇAMENTO e Metadados do Documento
       const badgeWidth = 48;
       const badgeHeight = 8;
       const badgeX = pageWidth - marginX - badgeWidth;
-      const badgeY = currentY - 6;
+      const badgeY = 10;
 
       doc.setFillColor(...themeP);
       doc.roundedRect(badgeX, badgeY, badgeWidth, badgeHeight, 2, 2, 'F');
@@ -1824,19 +1839,20 @@
       doc.setTextColor(255, 255, 255);
       doc.text('ORÇAMENTO', badgeX + (badgeWidth / 2), badgeY + 5.5, { align: 'center' });
 
-      // Detalhes da Proposta
-      currentY += 12;
+      // Detalhes da Proposta alinhados à direita
+      const metaStartY = badgeY + badgeHeight + 5;
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8.5);
       doc.setTextColor(71, 85, 105);
 
-      doc.text(`Orçamento Nº: ${docNum}`, pageWidth - marginX, currentY, { align: 'right' });
-      doc.text(`Data de Emissão: ${dateFormatted}`, pageWidth - marginX, currentY + 4.5, { align: 'right' });
-      doc.text(`Validade da Proposta: ${validityFormatted}`, pageWidth - marginX, currentY + 9, { align: 'right' });
+      doc.text(`Orçamento Nº: ${docNum}`, pageWidth - marginX, metaStartY, { align: 'right' });
+      doc.text(`Data de Emissão: ${dateFormatted}`, pageWidth - marginX, metaStartY + 4.5, { align: 'right' });
+      doc.text(`Validade da Proposta: ${validityFormatted}`, pageWidth - marginX, metaStartY + 9, { align: 'right' });
 
-      currentY += 14;
+      const headerRightEndY = metaStartY + 9;
 
-      // Divisor
+      // Divisor (posicionado abaixo de ambas as colunas)
+      currentY = Math.max(headerLeftEndY, headerRightEndY) + 5;
       doc.setDrawColor(226, 232, 240);
       doc.setLineWidth(0.4);
       doc.line(marginX, currentY, pageWidth - marginX, currentY);
@@ -2094,48 +2110,64 @@
       // 1. Barra Superior com cor do tema
       doc.setFillColor(...themeP);
       doc.rect(0, 0, pageWidth, 5, 'F');
-      currentY = 16;
+      // 2. Cabeçalho do Recibo (Esquerda: Logo -> Nome da Empresa -> Subtítulo empilhados à esquerda)
+      let headerLeftEndYR = 16;
 
-      // 2. Cabeçalho do Recibo
-      // Logo (se disponível)
-      let logoEndXR = marginX;
-      let headerTextYR = currentY;
       if (state.logoDataUrl) {
         try {
           const tempImg2 = new Image();
           tempImg2.src = state.logoDataUrl;
-          const logoMaxH = 18;
-          const logoMaxW = 55;
+          const logoMaxH = 16;
+          const logoMaxW = 60;
           const imgW2 = tempImg2.naturalWidth || 200;
           const imgH2 = tempImg2.naturalHeight || 80;
           const ratio2 = Math.min(logoMaxW / imgW2, logoMaxH / imgH2, 1);
           const finalLogoW2 = Math.max(10, imgW2 * ratio2);
           const finalLogoH2 = Math.max(5, imgH2 * ratio2);
-          doc.addImage(state.logoDataUrl, 'PNG', marginX, currentY - 8, finalLogoW2, finalLogoH2);
-          logoEndXR = marginX + finalLogoW2 + 5;
-          headerTextYR = currentY + 2;
+
+          const logoYR = 10;
+          doc.addImage(state.logoDataUrl, 'PNG', marginX, logoYR, finalLogoW2, finalLogoH2);
+
+          // Nome da empresa / recebedor logo abaixo da logo, alinhado à esquerda
+          const brandYR = logoYR + finalLogoH2 + 4.5;
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(13);
+          doc.setTextColor(30, 41, 59);
+          const headerBrandTextR = state.emitterName ? state.emitterName.toUpperCase() : 'PDFaz';
+          const brandLinesR = doc.splitTextToSize(headerBrandTextR, 115);
+          doc.text(brandLinesR[0], marginX, brandYR);
+
+          // Subtítulo logo abaixo do nome do emissor, alinhado à esquerda
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8.5);
+          doc.setTextColor(...themeP);
+          doc.text('Comprovante Oficial de Pagamento e Quitação', marginX, brandYR + 4.5);
+
+          headerLeftEndYR = brandYR + 4.5;
         } catch(e) {
           console.warn('Erro ao inserir logo no recibo:', e);
         }
+      } else {
+        const brandYR = 16;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.setTextColor(30, 41, 59);
+        const headerBrandTextR = state.emitterName ? state.emitterName.toUpperCase() : 'PDFaz';
+        doc.text(headerBrandTextR, marginX, brandYR);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(...themeP);
+        doc.text('Comprovante Oficial de Pagamento e Quitação', marginX, brandYR + 5);
+
+        headerLeftEndYR = brandYR + 5;
       }
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(state.logoDataUrl ? 14 : 18);
-      doc.setTextColor(30, 41, 59);
-
-      const headerBrandTextR = state.emitterName ? state.emitterName.toUpperCase() : 'PDFaz';
-      doc.text(headerBrandTextR, logoEndXR, headerTextYR);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8.5);
-      doc.setTextColor(...themeP);
-      doc.text('Comprovante Oficial de Pagamento e Quitação', logoEndXR, headerTextYR + 5);
 
       // Selo Retangular de Pagamento Confirmado no Topo Direito
       const stampWidth = 56;
       const stampHeight = 16;
       const stampX = pageWidth - marginX - stampWidth;
-      const stampY = currentY - 6;
+      const stampY = 10;
 
       // Cor de fundo suave baseada no tema
       const stampBg = themeP.map(c => Math.min(255, c + 200));
@@ -2154,16 +2186,19 @@
       doc.text('PAGAMENTO CONFIRMADO', stampX + (stampWidth / 2), stampY + 11.5, { align: 'center' });
 
       // Detalhes do Recibo
-      currentY += 15;
+      const metaStartYR = stampY + stampHeight + 4;
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8.5);
       doc.setTextColor(71, 85, 105);
 
-      doc.text(`Recibo Nº: ${docNum}`, pageWidth - marginX, currentY, { align: 'right' });
-      doc.text(`Data do Pagamento: ${dateFormatted}`, pageWidth - marginX, currentY + 4.5, { align: 'right' });
-      doc.text(`Forma: PAGO VIA ${state.paymentMethod || 'PIX'}`, pageWidth - marginX, currentY + 9, { align: 'right' });
+      doc.text(`Recibo Nº: ${docNum}`, pageWidth - marginX, metaStartYR, { align: 'right' });
+      doc.text(`Data do Pagamento: ${dateFormatted}`, pageWidth - marginX, metaStartYR + 4.5, { align: 'right' });
+      doc.text(`Forma: PAGO VIA ${state.paymentMethod || 'PIX'}`, pageWidth - marginX, metaStartYR + 9, { align: 'right' });
 
-      currentY += 13;
+      const headerRightEndYR = metaStartYR + 9;
+
+      // Inicia a declaração de quitação abaixo do cabeçalho
+      currentY = Math.max(headerLeftEndYR, headerRightEndYR) + 5;
 
       // 3. Bloco Distintivo do Recibo: GRANDE DECLARAÇÃO DE QUITAÇÃO
       const reciboBoxHeight = 24;

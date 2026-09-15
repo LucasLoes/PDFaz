@@ -3092,28 +3092,32 @@ body.mode-recibo .discount-toggle-btn.active {
   gap: 26px;
 }
 
-/* Linha Superior: Marca e Garantia de Privacidade */
+/* Linha Superior: Marca Centralizada e Card de Privacidade */
 .footer-main-row {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 32px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
   padding-bottom: 24px;
   border-bottom: 1px solid #F1F5F9;
 }
 
 .footer-brand-pane {
-  flex: 1.2;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 10px;
+  max-width: 620px;
+  width: 100%;
 }
 
 .footer-brand-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
 }
 
 .footer-brand-logo {
@@ -3137,10 +3141,12 @@ body.mode-recibo .discount-toggle-btn.active {
 .footer-brand-text {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .footer-app-name {
-  font-size: 1.12rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--text-main);
   letter-spacing: -0.02em;
@@ -3148,23 +3154,13 @@ body.mode-recibo .discount-toggle-btn.active {
 }
 
 .footer-app-tag {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   color: var(--text-muted);
   font-weight: 500;
 }
 
 .footer-badge-offline {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 3px 9px;
-  background-color: #ECFDF5;
-  border: 1px solid #A7F3D0;
-  border-radius: var(--radius-full);
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: #065F46;
-  letter-spacing: 0.02em;
+  display: none;
 }
 
 .pulse-indicator {
@@ -3183,26 +3179,30 @@ body.mode-recibo .discount-toggle-btn.active {
 }
 
 .footer-mission-text {
-  font-size: 0.82rem;
+  font-size: 0.83rem;
   line-height: 1.55;
   color: var(--text-secondary);
-  margin: 0;
-  max-width: 520px;
+  margin: 0 auto;
+  max-width: 560px;
+  text-align: center;
 }
 
 .footer-security-pane {
-  flex: 1;
-  max-width: 400px;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
 }
 
 .footer-sec-card {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 14px;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 18px;
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg, 12px);
+  text-align: left;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .footer-sec-icon {
@@ -3529,13 +3529,11 @@ body.mode-recibo .discount-toggle-btn.active {
 /* Responsividade do Rodapé */
 @media (max-width: 860px) {
   .footer-main-row {
-    flex-direction: column;
-    gap: 20px;
+    gap: 18px;
   }
 
   .footer-security-pane {
     max-width: 100%;
-    width: 100%;
   }
 }
 
@@ -3550,39 +3548,26 @@ body.mode-recibo .discount-toggle-btn.active {
   }
 
   .footer-main-row {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
     gap: 16px;
     padding-bottom: 18px;
   }
 
-  .footer-brand-pane {
-    align-items: center;
-    text-align: center;
-    width: 100%;
-  }
-
   .footer-brand-header {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    gap: 8px;
-    flex-direction: column;
+    gap: 10px;
   }
 
   .footer-brand-text {
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .footer-mission-text {
-    text-align: center;
-    font-size: 0.76rem;
-    line-height: 1.45;
+    font-size: 0.78rem;
+    line-height: 1.48;
     max-width: 480px;
-    margin: 8px auto 0;
+    margin: 4px auto 0;
   }
+}
 
   .footer-security-pane {
     width: 100%;
@@ -4682,15 +4667,6 @@ body.mode-recibo .discount-toggle-btn.active {
   border-radius: 50%;
   border: 2px solid rgba(255,255,255,0.6);
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-/* ==========================================================================
-   Rodapé — Centralização da Marca
-   ========================================================================== */
-
-.footer-brand-header--centered {
-  justify-content: flex-start;
-  gap: 12px;
 }
 
 /* Remove o badge offline (agora removido do HTML) */
