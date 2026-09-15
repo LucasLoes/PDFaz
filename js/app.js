@@ -3133,9 +3133,14 @@
         handleLogoFileInput(e.target.files[0]);
       });
     }
-    // Drag and drop na zona de logo
+    // Drag and drop e clique na zona de logo
     const logoZone = document.getElementById('logo-upload-zone');
     if (logoZone) {
+      logoZone.addEventListener('click', (e) => {
+        // Se o clique for no botão de remover ou dentro dele, não abre o seletor de arquivos
+        if (e.target.closest('#btn-remove-logo')) return;
+        if (dom.logoFileInput) dom.logoFileInput.click();
+      });
       logoZone.addEventListener('dragover', (e) => { e.preventDefault(); logoZone.classList.add('drag-over'); });
       logoZone.addEventListener('dragleave', () => logoZone.classList.remove('drag-over'));
       logoZone.addEventListener('drop', (e) => {
