@@ -4426,3 +4426,307 @@ body.mode-recibo .discount-toggle-btn.active {
     justify-content: center;
   }
 }
+
+/* ==========================================================================
+   Logomarca do Emissor — Upload Zone
+   ========================================================================== */
+
+.logo-upload-group {
+  margin-top: 4px;
+}
+
+.logo-upload-zone {
+  position: relative;
+  min-height: 90px;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  cursor: pointer;
+}
+
+.logo-upload-zone:hover,
+.logo-upload-zone.drag-over {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.logo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 18px 24px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.logo-placeholder svg {
+  color: var(--text-subtle);
+  margin-bottom: 2px;
+}
+
+.logo-hint {
+  font-size: 0.7rem;
+  color: var(--text-subtle);
+}
+
+.logo-preview-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  width: 100%;
+}
+
+.logo-preview-img {
+  max-height: 80px;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.btn-remove-logo {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  background: rgba(239, 68, 68, 0.9);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-remove-logo:hover {
+  background: #DC2626;
+  transform: scale(1.1);
+}
+
+.btn-upload-logo {
+  margin-top: 8px;
+  width: 100%;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   Modal de Seleção de Modelos
+   ========================================================================== */
+
+.models-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.models-modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.models-modal-container {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 680px;
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  transform: scale(0.97) translateY(8px);
+  transition: transform 0.25s ease;
+}
+
+.models-modal-overlay.active .models-modal-container {
+  transform: scale(1) translateY(0);
+}
+
+.models-modal-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.models-modal-title-group {
+  flex: 1;
+}
+
+.models-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.models-modal-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.models-modal-close {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--bg-muted);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.models-modal-close:hover {
+  background: var(--border-color);
+  color: var(--text-main);
+}
+
+.models-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  padding: 20px 24px 24px;
+}
+
+.model-card {
+  position: relative;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  cursor: pointer;
+  overflow: hidden;
+  text-align: left;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  padding: 0;
+}
+
+.model-card:hover {
+  border-color: var(--model-primary, var(--primary));
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+}
+
+.model-card-accent {
+  height: 6px;
+  width: 100%;
+}
+
+.model-card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.model-emoji {
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.model-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.model-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.model-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.model-palette {
+  display: flex;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.palette-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* ==========================================================================
+   Rodapé — Centralização da Marca
+   ========================================================================== */
+
+.footer-brand-header--centered {
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+/* Remove o badge offline (agora removido do HTML) */
+.footer-badge-offline {
+  display: none;
+}
+
+/* ==========================================================================
+   A4 Preview — Suporte a Temas de Cor
+   ========================================================================== */
+
+.native-a4-preview-sheet .a4-table thead {
+  background: var(--theme-primary, #2563EB);
+}
+
+.native-a4-preview-sheet .a4-total-banner {
+  background: var(--theme-primary, #2563EB) !important;
+}
+
+.a4-header-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (max-width: 480px) {
+  .models-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .models-modal-header {
+    padding: 16px 16px 12px;
+  }
+
+  .models-grid {
+    padding: 14px 16px 16px;
+    gap: 10px;
+  }
+}

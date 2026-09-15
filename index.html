@@ -162,12 +162,14 @@
         </button>
 
         <button type="button" id="btn-load-example" class="btn btn-outline btn-sm btn-header-action"
-          title="Preencher com dados de exemplo" aria-label="Preencher com dados de exemplo">
+          title="Escolher modelo pré-preenchido para o seu segmento" aria-label="Escolher modelo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
             stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
           </svg>
-          <span class="btn-header-label">Exemplo</span>
+          <span class="btn-header-label">Modelos</span>
         </button>
 
         <button type="button" id="btn-clear-form" class="btn btn-ghost btn-sm btn-header-action" 
@@ -368,6 +370,45 @@
                 <label for="emitter-email" class="form-label">E-mail</label>
                 <input type="email" id="emitter-email" class="form-input" placeholder="contato@seuemail.com">
               </div>
+            </div>
+
+            <!-- Logomarca do Emissor -->
+            <div class="form-group logo-upload-group">
+              <label class="form-label">
+                Logomarca da Empresa
+                <span class="optional">PNG ou JPG • Máx. 2MB</span>
+              </label>
+              <div id="logo-upload-zone" class="logo-upload-zone">
+                <!-- Preview da logo após upload -->
+                <div id="logo-preview-container" class="logo-preview-container" style="display:none;">
+                  <img id="logo-preview-img" src="" alt="Logomarca" class="logo-preview-img">
+                  <button type="button" id="btn-remove-logo" class="btn-remove-logo" title="Remover logomarca">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+                <!-- Placeholder (quando não há logo) -->
+                <div id="logo-placeholder" class="logo-placeholder">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  <span>Arraste ou clique para adicionar a logomarca</span>
+                  <span class="logo-hint">Altura máx. recomendada: 400px • Proporções 4:3, 16:9 e outras são aceitas</span>
+                </div>
+                <input type="file" id="logo-file-input" accept=".jpg,.jpeg,.png,.webp" style="display:none;">
+              </div>
+              <button type="button" id="btn-upload-logo-trigger" class="btn btn-outline btn-sm btn-upload-logo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                Enviar Logomarca
+              </button>
             </div>
           </div>
         </div>
@@ -788,7 +829,7 @@
         <!-- Topo do Rodapé: Marca, Missão & Garantia Local -->
         <div class="footer-main-row">
           <div class="footer-brand-pane">
-            <div class="footer-brand-header">
+            <div class="footer-brand-header footer-brand-header--centered">
               <div class="footer-brand-logo">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -803,10 +844,6 @@
                 <span class="footer-app-name">PDFaz</span>
                 <span class="footer-app-tag">Gerador de Orçamentos &amp; Recibos</span>
               </div>
-              <span class="footer-badge-offline">
-                <span class="pulse-indicator"></span>
-                100% Client-Side
-              </span>
             </div>
             <p class="footer-mission-text">
               Plataforma independente criada para dar agilidade, formalidade e autonomia diária aos prestadores de
@@ -955,7 +992,7 @@
 
           <div class="footer-tech-badges">
             <span class="tech-tag">Zero Servidor Externo</span>
-            <span class="tech-tag">PWA Instalável</span>
+            <span class="tech-tag">Funciona Offline</span>
             <span class="tech-tag">QR Code PIX Banco Central</span>
           </div>
         </div>
@@ -1228,6 +1265,114 @@
         </button>
       </div>
     </aside>
+  </div>
+
+  <!-- Modal de Seleção de Modelos -->
+  <div id="models-modal" class="models-modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="models-modal-title">
+    <div class="models-modal-container">
+      <div class="models-modal-header">
+        <div class="models-modal-title-group">
+          <h3 id="models-modal-title" class="models-modal-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+            </svg>
+            Escolha um Modelo
+          </h3>
+          <p class="models-modal-subtitle">Preencha o formulário com dados de exemplo adaptados ao seu segmento e descubra a paleta de cores personalizada do seu ramo</p>
+        </div>
+        <button type="button" id="btn-close-models" class="models-modal-close" aria-label="Fechar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="models-grid">
+
+        <!-- Arquitetura -->
+        <button type="button" class="model-card" data-model-key="arquitetura" style="--model-primary:#1A1A2E; --model-secondary:#E94560;">
+          <div class="model-card-accent" style="background:linear-gradient(135deg, #1A1A2E, #E94560);"></div>
+          <div class="model-card-body">
+            <div class="model-emoji">🏛️</div>
+            <div class="model-info">
+              <strong class="model-name">Arquitetura</strong>
+              <span class="model-desc">Projetos residenciais e comerciais</span>
+            </div>
+            <div class="model-palette">
+              <span class="palette-dot" style="background:#1A1A2E;"></span>
+              <span class="palette-dot" style="background:#E94560;"></span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Design -->
+        <button type="button" class="model-card" data-model-key="design" style="--model-primary:#6C3483; --model-secondary:#F39C12;">
+          <div class="model-card-accent" style="background:linear-gradient(135deg, #6C3483, #F39C12);"></div>
+          <div class="model-card-body">
+            <div class="model-emoji">🎨</div>
+            <div class="model-info">
+              <strong class="model-name">Design</strong>
+              <span class="model-desc">Identidade visual e criação gráfica</span>
+            </div>
+            <div class="model-palette">
+              <span class="palette-dot" style="background:#6C3483;"></span>
+              <span class="palette-dot" style="background:#F39C12;"></span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Marketing -->
+        <button type="button" class="model-card" data-model-key="marketing" style="--model-primary:#C0392B; --model-secondary:#F1C40F;">
+          <div class="model-card-accent" style="background:linear-gradient(135deg, #C0392B, #F1C40F);"></div>
+          <div class="model-card-body">
+            <div class="model-emoji">📢</div>
+            <div class="model-info">
+              <strong class="model-name">Marketing</strong>
+              <span class="model-desc">Gestão de redes e campanhas</span>
+            </div>
+            <div class="model-palette">
+              <span class="palette-dot" style="background:#C0392B;"></span>
+              <span class="palette-dot" style="background:#F1C40F;"></span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Produtora de Vídeo -->
+        <button type="button" class="model-card" data-model-key="produtora" style="--model-primary:#1C2833; --model-secondary:#1ABC9C;">
+          <div class="model-card-accent" style="background:linear-gradient(135deg, #1C2833, #1ABC9C);"></div>
+          <div class="model-card-body">
+            <div class="model-emoji">🎬</div>
+            <div class="model-info">
+              <strong class="model-name">Produtora de Vídeo</strong>
+              <span class="model-desc">Gravação, edição e pós-produção</span>
+            </div>
+            <div class="model-palette">
+              <span class="palette-dot" style="background:#1C2833;"></span>
+              <span class="palette-dot" style="background:#1ABC9C;"></span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Consultoria -->
+        <button type="button" class="model-card" data-model-key="consultoria" style="--model-primary:#154360; --model-secondary:#27AE60;">
+          <div class="model-card-accent" style="background:linear-gradient(135deg, #154360, #27AE60);"></div>
+          <div class="model-card-body">
+            <div class="model-emoji">💼</div>
+            <div class="model-info">
+              <strong class="model-name">Consultoria</strong>
+              <span class="model-desc">Estratégia, gestão e treinamentos</span>
+            </div>
+            <div class="model-palette">
+              <span class="palette-dot" style="background:#154360;"></span>
+              <span class="palette-dot" style="background:#27AE60;"></span>
+            </div>
+          </div>
+        </button>
+
+      </div>
+    </div>
   </div>
 
   <!-- Container de Mensagens Toast -->

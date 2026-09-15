@@ -44,7 +44,17 @@
     includePixQr: true,
 
     // Observações Gerais
-    notes: 'Condições de pagamento: 50% de entrada e 50% na entrega.\nPrazo de entrega: 15 dias úteis após aprovação.'
+    notes: 'Condições de pagamento: 50% de entrada e 50% na entrega.\nPrazo de entrega: 15 dias úteis após aprovação.',
+
+    // Logomarca do Emissor (base64 DataURL)
+    logoDataUrl: null,
+
+    // Tema/Paleta de Cores do Documento
+    docTheme: {
+      name: 'padrao',
+      primary: [37, 99, 235],    // #2563EB azul padrão
+      secondary: [30, 41, 59]    // #1E293B
+    }
   };
 
   // Elementos do DOM
@@ -162,7 +172,20 @@
     btnPdfModalApprove: document.getElementById('btn-pdf-modal-approve-download'),
     btnPdfModalApproveText: document.getElementById('btn-pdf-modal-approve-text'),
     btnPdfModalWhatsapp: document.getElementById('btn-pdf-modal-whatsapp'),
-    btnPreviewPdfMobile: document.getElementById('btn-preview-pdf-mobile')
+    btnPreviewPdfMobile: document.getElementById('btn-preview-pdf-mobile'),
+
+    // Logomarca
+    logoFileInput: document.getElementById('logo-file-input'),
+    logoPreviewImg: document.getElementById('logo-preview-img'),
+    logoPreviewContainer: document.getElementById('logo-preview-container'),
+    logoPlaceholder: document.getElementById('logo-placeholder'),
+    btnRemoveLogo: document.getElementById('btn-remove-logo'),
+    btnUploadLogoTrigger: document.getElementById('btn-upload-logo-trigger'),
+
+    // Modal de Modelos
+    modelsModal: document.getElementById('models-modal'),
+    modelsModalOverlay: document.getElementById('models-modal-overlay'),
+    btnCloseModels: document.getElementById('btn-close-models')
   };
 
   // Instâncias do gerador QRCode.js
@@ -1133,7 +1156,9 @@
    * Alterna tipo de desconto entre moeda (R$) e porcentagem (%)
    */
   function setDiscountType(type) {
+    const prevType = state.discountType;
     state.discountType = type;
+
     if (dom.btnDiscountCurrency && dom.btnDiscountPercent) {
       if (type === 'currency') {
         dom.btnDiscountCurrency.classList.add('active');
@@ -1141,15 +1166,33 @@
         if (dom.discountSymbol) dom.discountSymbol.textContent = 'R$';
         if (dom.inputDiscount) {
           dom.inputDiscount.placeholder = '0,00';
+          dom.inputDiscount.setAttribute('step', '0.01');
           dom.inputDiscount.removeAttribute('max');
+          // Converter % → R$ se estava em porcentagem
+          if (prevType === 'percent') {
+            const currentPct = parseFloat(dom.inputDiscount.value) || 0;
+            const subtotal = calculateTotals().subtotal;
+            const valueInCurrency = subtotal > 0 ? parseFloat(((currentPct / 100) * subtotal).toFixed(2)) : 0;
+            dom.inputDiscount.value = valueInCurrency > 0 ? valueInCurrency : '';
+            state.discount = valueInCurrency;
+          }
         }
       } else {
         dom.btnDiscountPercent.classList.add('active');
         dom.btnDiscountCurrency.classList.remove('active');
         if (dom.discountSymbol) dom.discountSymbol.textContent = '%';
         if (dom.inputDiscount) {
-          dom.inputDiscount.placeholder = '0%';
+          dom.inputDiscount.placeholder = '0';
+          dom.inputDiscount.setAttribute('step', '5');
           dom.inputDiscount.setAttribute('max', '100');
+          // Converter R$ → % quando troca de moeda para porcentagem
+          if (prevType === 'currency') {
+            const currentVal = parseFloat(dom.inputDiscount.value) || 0;
+            const subtotal = calculateTotals().subtotal;
+            const pct = subtotal > 0 ? Math.min(100, parseFloat(((currentVal / subtotal) * 100).toFixed(1))) : 0;
+            dom.inputDiscount.value = pct > 0 ? pct : '';
+            state.discount = pct;
+          }
         }
       }
     }
@@ -1234,6 +1277,7 @@
 
       state.notes = dom.notes.value;
 
+      // logoDataUrl e docTheme já são mantidos diretamente no state
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (e) {
       console.warn('Não foi possível salvar no localStorage:', e);
@@ -1248,6 +1292,7 @@
       const parsed = JSON.parse(saved);
       Object.assign(state, parsed);
       state.discountType = parsed.discountType || 'currency';
+      state.docTheme = parsed.docTheme || { name: 'padrao', primary: [37, 99, 235], secondary: [30, 41, 59] };
 
       // Preenche os inputs com os dados recuperados
       if (dom.docNumber) dom.docNumber.value = state.docNumber || '001';
@@ -1271,6 +1316,11 @@
       if (dom.pixBankInput) dom.pixBankInput.value = state.pixBank || '';
       if (dom.includePixQrCheckbox) dom.includePixQrCheckbox.checked = state.includePixQr !== false;
 
+      // Restaura logomarca salva
+      if (state.logoDataUrl) {
+        renderLogoPreview(state.logoDataUrl);
+      }
+
       setDiscountType(state.discountType || 'currency');
       setDocType(state.docType || 'orcamento');
       renderItems();
@@ -1283,46 +1333,275 @@
   }
 
   // =========================================================================
-  // Dados de Exemplo e Limpeza
+  // Logomarca do Emissor
   // =========================================================================
 
-  function loadExampleData() {
+  /**
+   * Renderiza a preview da logo no painel do emissor
+   */
+  function renderLogoPreview(dataUrl) {
+    if (dom.logoPreviewImg) {
+      dom.logoPreviewImg.src = dataUrl;
+    }
+    if (dom.logoPreviewContainer) {
+      dom.logoPreviewContainer.style.display = 'flex';
+    }
+    if (dom.logoPlaceholder) {
+      dom.logoPlaceholder.style.display = 'none';
+    }
+  }
+
+  /**
+   * Remove a logomarca atual
+   */
+  function removeLogo() {
+    state.logoDataUrl = null;
+    if (dom.logoPreviewImg) dom.logoPreviewImg.src = '';
+    if (dom.logoPreviewContainer) dom.logoPreviewContainer.style.display = 'none';
+    if (dom.logoPlaceholder) dom.logoPlaceholder.style.display = 'flex';
+    if (dom.logoFileInput) dom.logoFileInput.value = '';
+    saveToLocalStorage();
+    showToast('Logomarca removida.', 'info');
+  }
+
+  /**
+   * Redimensiona uma imagem para caber dentro de maxW x maxH preservando proporção
+   * Retorna um dataURL PNG
+   */
+  function resizeImageToFit(img, maxW, maxH) {
+    let { naturalWidth: w, naturalHeight: h } = img;
+    const ratio = Math.min(maxW / w, maxH / h, 1);
+    const finalW = Math.round(w * ratio);
+    const finalH = Math.round(h * ratio);
+    const canvas = document.createElement('canvas');
+    canvas.width = finalW;
+    canvas.height = finalH;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, finalW, finalH);
+    return canvas.toDataURL('image/png');
+  }
+
+  /**
+   * Handler para o input de arquivo da logo
+   */
+  function handleLogoFileInput(file) {
+    if (!file) return;
+
+    // Valida tipo
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      showToast('Formato inválido. Use JPG, PNG ou WebP.', 'danger');
+      return;
+    }
+
+    // Valida tamanho (2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      showToast('Arquivo muito grande. Tamanho máximo: 2 MB.', 'danger');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        // Redimensiona para altura máxima de 240px e largura de 720px
+        const resized = resizeImageToFit(img, 720, 240);
+        state.logoDataUrl = resized;
+        renderLogoPreview(resized);
+        saveToLocalStorage();
+        showToast('Logomarca adicionada com sucesso!', 'success');
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // =========================================================================
+  // Modelos de Exemplo por Segmento
+  // =========================================================================
+
+  const MODELS = {
+    arquitetura: {
+      label: 'Arquitetura',
+      emoji: '🏛️',
+      desc: 'Projetos e pranchas arquitetônicas',
+      theme: { name: 'arquitetura', primary: [26, 26, 46], secondary: [233, 69, 96] },
+      data: {
+        emitterName: 'ArqForm Projetos e Soluções MEI',
+        emitterDoc: '38.102.456/0001-72',
+        emitterPhone: '(11) 97654-3210',
+        emitterEmail: 'contato@arqform.com.br',
+        clientName: 'Construtora Bellagio Ltda.',
+        clientDoc: '12.456.789/0001-00',
+        clientAddress: 'Rua das Magnólias, 250 - Jardins, São Paulo - SP',
+        items: [
+          { id: 1, description: 'Projeto Arquitetônico Residencial (150m²)', quantity: 1, unitPrice: 4500 },
+          { id: 2, description: 'Projeto Hidrossanitário e Elétrico', quantity: 1, unitPrice: 1800 },
+          { id: 3, description: 'Pranchas Executivas em PDF e AutoCAD', quantity: 3, unitPrice: 350 }
+        ],
+        discount: 0,
+        discountType: 'currency',
+        pixKey: '38.102.456/0001-72',
+        pixBank: 'Banco do Brasil (ArqForm Projetos MEI)',
+        notes: 'ART registrada no CAU-SP.\nEntrega das pranchas: 20 dias úteis após aprovação da proposta.\nRevisões inclusas: até 2 rodadas de ajustes.'
+      }
+    },
+    design: {
+      label: 'Design',
+      emoji: '🎨',
+      desc: 'Identidade visual e criação gráfica',
+      theme: { name: 'design', primary: [108, 52, 131], secondary: [243, 156, 18] },
+      data: {
+        emitterName: 'Pixel & Forma Design Studio MEI',
+        emitterDoc: '56.203.874/0001-11',
+        emitterPhone: '(21) 96543-8765',
+        emitterEmail: 'oi@pixeleforma.com.br',
+        clientName: 'Moda Aurea Boutique S/A',
+        clientDoc: '98.765.432/0001-55',
+        clientAddress: 'Av. das Américas, 3434 - Barra da Tijuca, Rio de Janeiro - RJ',
+        items: [
+          { id: 1, description: 'Identidade Visual Completa (Logo + Manual de Marca)', quantity: 1, unitPrice: 3200 },
+          { id: 2, description: 'Design de Embalagem Produto Premium', quantity: 5, unitPrice: 480 },
+          { id: 3, description: 'Pack de Posts para Redes Sociais (10 layouts)', quantity: 1, unitPrice: 900 }
+        ],
+        discount: 10,
+        discountType: 'percent',
+        pixKey: '56.203.874/0001-11',
+        pixBank: 'Nubank (Pixel & Forma Design MEI)',
+        notes: 'Entrega dos arquivos em AI, PDF e PNG.\nPrazo: 12 dias úteis.\nDesconto de 10% para pagamento antecipado.'
+      }
+    },
+    marketing: {
+      label: 'Marketing',
+      emoji: '📢',
+      desc: 'Gestão de redes, tráfego e campanhas',
+      theme: { name: 'marketing', primary: [192, 57, 43], secondary: [241, 196, 15] },
+      data: {
+        emitterName: 'Nexus Growth Marketing MEI',
+        emitterDoc: '74.918.302/0001-88',
+        emitterPhone: '(31) 98234-5670',
+        emitterEmail: 'vendas@nexusgrowth.com.br',
+        clientName: 'Sabores da Terra Restaurante LTDA',
+        clientDoc: '45.678.901/0001-23',
+        clientAddress: 'Praça do Mercado, 88 - Centro, Belo Horizonte - MG',
+        items: [
+          { id: 1, description: 'Gestão de Instagram e Facebook (Mensal)', quantity: 1, unitPrice: 1500 },
+          { id: 2, description: 'Tráfego Pago Google Ads + Meta Ads (Verba gerida)', quantity: 1, unitPrice: 800 },
+          { id: 3, description: 'Produção de Reels e Stories (8 vídeos)', quantity: 1, unitPrice: 1200 }
+        ],
+        discount: 0,
+        discountType: 'currency',
+        pixKey: '74.918.302/0001-88',
+        pixBank: 'Inter (Nexus Growth Marketing MEI)',
+        notes: 'Contrato mensal com renovação automática.\nRelatório de performance entregue todo dia 5.\nVerba de anúncios não está inclusa neste orçamento.'
+      }
+    },
+    produtora: {
+      label: 'Produtora de Vídeo',
+      emoji: '🎬',
+      desc: 'Gravação, edição e pós-produção',
+      theme: { name: 'produtora', primary: [28, 40, 51], secondary: [26, 188, 156] },
+      data: {
+        emitterName: 'Frame by Frame Produtora MEI',
+        emitterDoc: '29.845.673/0001-04',
+        emitterPhone: '(11) 94567-8901',
+        emitterEmail: 'producao@framebyframe.video',
+        clientName: 'TechConf Brasil — Evento Corporativo',
+        clientDoc: '11.223.344/0001-99',
+        clientAddress: 'Av. Faria Lima, 1234 - Itaim Bibi, São Paulo - SP',
+        items: [
+          { id: 1, description: 'Captação Ao Vivo (2 câmeras + operador)', quantity: 1, unitPrice: 2800 },
+          { id: 2, description: 'Edição Vídeo Institucional (até 5 min, cor grading)', quantity: 1, unitPrice: 1600 },
+          { id: 3, description: 'Sonorização e Trilha Livre de Direitos', quantity: 1, unitPrice: 600 },
+          { id: 4, description: 'Motion Graphics e Vinheta de Abertura', quantity: 1, unitPrice: 900 }
+        ],
+        discount: 5,
+        discountType: 'percent',
+        pixKey: '29.845.673/0001-04',
+        pixBank: 'Bradesco (Frame by Frame Produtora MEI)',
+        notes: 'Entrega do corte final: 10 dias úteis pós-evento.\nArquivos entregues em MP4 4K e H.264 Full HD.\n1 rodada de revisão incluída.'
+      }
+    },
+    consultoria: {
+      label: 'Consultoria',
+      emoji: '💼',
+      desc: 'Consultorias estratégicas e treinamentos',
+      theme: { name: 'consultoria', primary: [21, 67, 96], secondary: [39, 174, 96] },
+      data: {
+        emitterName: 'Mello & Associados Consultoria MEI',
+        emitterDoc: '61.374.820/0001-36',
+        emitterPhone: '(41) 99876-5432',
+        emitterEmail: 'contato@melloassociados.com.br',
+        clientName: 'Grupo Expansão Industrial S.A.',
+        clientDoc: '77.889.900/0001-01',
+        clientAddress: 'Rua XV de Novembro, 500 - Centro, Curitiba - PR',
+        items: [
+          { id: 1, description: 'Diagnóstico Organizacional e Análise SWOT', quantity: 1, unitPrice: 3500 },
+          { id: 2, description: 'Workshop de Liderança (8 horas presenciais)', quantity: 2, unitPrice: 1800 },
+          { id: 3, description: 'Relatório Executivo de Recomendações Estratégicas', quantity: 1, unitPrice: 2200 }
+        ],
+        discount: 0,
+        discountType: 'currency',
+        pixKey: '61.374.820/0001-36',
+        pixBank: 'Santander (Mello & Associados MEI)',
+        notes: 'Reuniões de acompanhamento: 2 encontros mensais inclusos.\nSigilo garantido por NDA assinado em conjunto.\nValidade da proposta: 30 dias.'
+      }
+    }
+  };
+
+  /**
+   * Preenche o formulário com os dados do modelo selecionado
+   */
+  function loadModel(modelKey) {
+    const model = MODELS[modelKey];
+    if (!model) return;
+
     const today = new Date();
     const validityDate = new Date();
-    validityDate.setDate(today.getDate() + 15);
+    validityDate.setDate(today.getDate() + 30);
 
-    state.docType = 'orcamento';
-    state.docNumber = '2026-0042';
+    const d = model.data;
+
+    // Aplica tema
+    state.docTheme = model.theme;
+
+    // Número e datas
+    state.docNumber = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '01';
     state.docDate = today.toISOString().split('T')[0];
     state.docValidity = validityDate.toISOString().split('T')[0];
     state.paymentMethod = 'PIX';
 
-    state.emitterName = 'Studio Digital Nexus MEI';
-    state.emitterDoc = '45.123.789/0001-90';
-    state.emitterPhone = '(11) 98765-4321';
-    state.emitterEmail = 'contato@studionexus.com.br';
+    // Emissor
+    state.emitterName = d.emitterName;
+    state.emitterDoc = d.emitterDoc;
+    state.emitterPhone = d.emitterPhone;
+    state.emitterEmail = d.emitterEmail;
 
-    state.clientName = 'Dra. Camila Vasconcelos Consultoria';
-    state.clientDoc = '312.654.987-00';
-    state.clientAddress = 'Av. Paulista, 1000, Cj. 42 - Bela Vista, São Paulo - SP';
+    // Cliente
+    state.clientName = d.clientName;
+    state.clientDoc = d.clientDoc;
+    state.clientAddress = d.clientAddress;
 
-    state.items = [
-      { id: 1, description: 'Desenvolvimento de Website Responsivo & Otimizado', quantity: 1, unitPrice: 2200 },
-      { id: 2, description: 'Criação de Identidade Visual e Manual de Marca', quantity: 1, unitPrice: 850 },
-      { id: 3, description: 'Hospedagem de Alta Performance e Domínio (1 ano)', quantity: 1, unitPrice: 350 }
-    ];
+    // Itens
+    state.items = d.items.map((item, i) => ({ ...item, id: i + 1 }));
 
-    state.discount = 200;
-    state.pixKey = '45.123.789/0001-90';
-    state.pixBank = 'Banco Inter (Studio Digital Nexus MEI)';
+    // Financeiro
+    state.discount = d.discount;
+    state.discountType = d.discountType;
+
+    // PIX
+    state.pixKey = d.pixKey;
+    state.pixBank = d.pixBank;
     state.includePixQr = true;
-    state.notes = 'Condições: 50% de entrada e 50% na entrega.\nPrazo de execução: 15 dias úteis a contar do pagamento da entrada.\nGarantia de 90 dias após entrega final.';
+
+    // Notas
+    state.notes = d.notes;
 
     // Atualiza DOM
     dom.docNumber.value = state.docNumber;
     dom.docDate.value = state.docDate;
-    dom.docValidity.value = state.docValidity;
-    dom.paymentMethod.value = state.paymentMethod;
+    if (dom.docValidity) dom.docValidity.value = state.docValidity;
+    if (dom.paymentMethod) dom.paymentMethod.value = 'PIX';
 
     dom.emitterName.value = state.emitterName;
     dom.emitterDoc.value = state.emitterDoc;
@@ -1333,19 +1612,49 @@
     dom.clientDoc.value = state.clientDoc;
     dom.clientAddress.value = state.clientAddress;
 
-    dom.inputDiscount.value = state.discount;
+    dom.inputDiscount.value = state.discount > 0 ? state.discount : '';
     dom.notes.value = state.notes;
 
     if (dom.pixKeyInput) dom.pixKeyInput.value = state.pixKey;
     if (dom.pixBankInput) dom.pixBankInput.value = state.pixBank;
     if (dom.includePixQrCheckbox) dom.includePixQrCheckbox.checked = true;
 
-    setDocType('orcamento');
+    setDiscountType(state.discountType);
     renderItems();
     updatePixQrCode();
     saveToLocalStorage();
 
-    showToast('Modelo de exemplo preenchido com sucesso!', 'success');
+    closeModelsModal();
+    showToast(`Modelo "${model.label}" aplicado com sucesso!`, 'success');
+  }
+
+  /**
+   * Abre o modal de seleção de modelos
+   */
+  function openModelsModal() {
+    if (dom.modelsModal) {
+      dom.modelsModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  /**
+   * Fecha o modal de seleção de modelos
+   */
+  function closeModelsModal() {
+    if (dom.modelsModal) {
+      dom.modelsModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // =========================================================================
+  // Dados de Exemplo e Limpeza
+  // =========================================================================
+
+  function loadExampleData() {
+    // Mantido para compatibilidade — agora delega ao modelo padrão de consultoria
+    loadModel('consultoria');
   }
 
   function clearForm() {
@@ -1373,6 +1682,8 @@
     state.pixKey = '';
     state.pixBank = '';
     state.notes = '';
+    state.logoDataUrl = null;
+    state.docTheme = { name: 'padrao', primary: [37, 99, 235], secondary: [30, 41, 59] };
 
     // Atualiza DOM
     dom.docNumber.value = state.docNumber;
@@ -1394,6 +1705,9 @@
 
     if (dom.pixKeyInput) dom.pixKeyInput.value = '';
     if (dom.pixBankInput) dom.pixBankInput.value = '';
+
+    // Remove logo
+    removeLogo();
 
     renderItems();
     updatePixQrCode();
@@ -1437,6 +1751,11 @@
     // Totais calculados
     const totals = calculateTotals();
 
+    // Paleta de cores do tema escolhido
+    const theme = state.docTheme || { primary: [37, 99, 235], secondary: [30, 41, 59] };
+    const themeP = theme.primary || [37, 99, 235];
+    const themeS = theme.secondary || [30, 41, 59];
+
     // QR Code PIX (se disponível e habilitado) gerado no padrão BR Code oficial com valor total
     let qrDataUrl = null;
     if (state.includePixQr && state.pixKey) {
@@ -1447,26 +1766,49 @@
     }
 
     // =======================================================================
-    // LAYOUT 1: ORÇAMENTO COMERCIAL (Tema Azul Corporativo)
+    // LAYOUT 1: ORÇAMENTO COMERCIAL
     // =======================================================================
     if (isOrcamento) {
-      // 1. Barra Superior Azul
-      doc.setFillColor(37, 99, 235); // #2563EB
+      // 1. Barra Superior com cor do tema
+      doc.setFillColor(...themeP);
       doc.rect(0, 0, pageWidth, 5, 'F');
       currentY = 16;
 
       // 2. Cabeçalho Principal
+      // Logo (se disponível)
+      let logoEndX = marginX;
+      let headerTextY = currentY;
+      if (state.logoDataUrl) {
+        try {
+          // Calcula dimensão proporcional: altura máx 18mm
+          const tempImg = new Image();
+          tempImg.src = state.logoDataUrl;
+          const logoMaxH = 18;
+          const logoMaxW = 55;
+          const imgW = tempImg.naturalWidth || 200;
+          const imgH = tempImg.naturalHeight || 80;
+          const ratio = Math.min(logoMaxW / imgW, logoMaxH / imgH, 1);
+          const finalLogoW = Math.max(10, imgW * ratio);
+          const finalLogoH = Math.max(5, imgH * ratio);
+          doc.addImage(state.logoDataUrl, 'PNG', marginX, currentY - 8, finalLogoW, finalLogoH);
+          logoEndX = marginX + finalLogoW + 5;
+          headerTextY = currentY + 2;
+        } catch(e) {
+          console.warn('Erro ao inserir logo no PDF:', e);
+        }
+      }
+
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(18);
+      doc.setFontSize(state.logoDataUrl ? 14 : 18);
       doc.setTextColor(30, 41, 59);
 
       const headerBrandText = state.emitterName ? state.emitterName.toUpperCase() : 'PDFaz';
-      doc.text(headerBrandText, marginX, currentY);
+      doc.text(headerBrandText, logoEndX, headerTextY);
 
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8.5);
       doc.setTextColor(100, 116, 139);
-      doc.text('Proposta Comercial & Orçamento de Prestação de Serviços', marginX, currentY + 5);
+      doc.text('Proposta Comercial & Orçamento de Prestação de Serviços', logoEndX, headerTextY + 5);
 
       // Badge: ORÇAMENTO COMERCIAL
       const badgeWidth = 48;
@@ -1474,7 +1816,7 @@
       const badgeX = pageWidth - marginX - badgeWidth;
       const badgeY = currentY - 6;
 
-      doc.setFillColor(37, 99, 235);
+      doc.setFillColor(...themeP);
       doc.roundedRect(badgeX, badgeY, badgeWidth, badgeHeight, 2, 2, 'F');
 
       doc.setFont('helvetica', 'bold');
@@ -1511,7 +1853,7 @@
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(8);
-      doc.setTextColor(37, 99, 235);
+      doc.setTextColor(...themeP);
       doc.text('PRESTADOR / EMISSOR:', marginX + 4, currentY + 6);
 
       doc.setFont('helvetica', 'bold');
@@ -1534,7 +1876,7 @@
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(8);
-      doc.setTextColor(37, 99, 235);
+      doc.setTextColor(...themeP);
       doc.text('CLIENTE / DESTINATÁRIO:', clientX + 4, currentY + 6);
 
       doc.setFont('helvetica', 'bold');
@@ -1575,7 +1917,7 @@
         body: tableBody,
         theme: 'grid',
         headStyles: {
-          fillColor: [37, 99, 235], // #2563EB
+          fillColor: themeP,
           textColor: [255, 255, 255],
           fontSize: 9,
           fontStyle: 'bold',
@@ -1636,7 +1978,7 @@
 
       // Tarja Total
       totY += 5.5;
-      doc.setFillColor(37, 99, 235);
+      doc.setFillColor(...themeP);
       doc.roundedRect(totalsX + 2, totY, totalsWidth - 4, 9, 1.5, 1.5, 'F');
 
       doc.setFont('helvetica', 'bold');
@@ -1653,7 +1995,7 @@
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(8);
-      doc.setTextColor(37, 99, 235);
+      doc.setTextColor(...themeP);
       doc.text('DADOS PARA PAGAMENTO (PIX):', marginX + 4, currentY + 5.5);
 
       // Renderiza QR Code se disponível
@@ -1746,26 +2088,48 @@
       doc.text('Prestador do Serviço', signEmitterX + (signLineWidth / 2), currentY + 24, { align: 'center' });
 
     // =======================================================================
-    // LAYOUT 2: RECIBO DE QUITAÇÃO (Tema Verde Esmeralda / Carimbo de Quitado)
+    // LAYOUT 2: RECIBO DE QUITAÇÃO (Tema do modelo selecionado)
     // =======================================================================
     } else {
-      // 1. Barra Superior Verde Esmeralda
-      doc.setFillColor(5, 150, 105); // #059669
+      // 1. Barra Superior com cor do tema
+      doc.setFillColor(...themeP);
       doc.rect(0, 0, pageWidth, 5, 'F');
       currentY = 16;
 
       // 2. Cabeçalho do Recibo
+      // Logo (se disponível)
+      let logoEndXR = marginX;
+      let headerTextYR = currentY;
+      if (state.logoDataUrl) {
+        try {
+          const tempImg2 = new Image();
+          tempImg2.src = state.logoDataUrl;
+          const logoMaxH = 18;
+          const logoMaxW = 55;
+          const imgW2 = tempImg2.naturalWidth || 200;
+          const imgH2 = tempImg2.naturalHeight || 80;
+          const ratio2 = Math.min(logoMaxW / imgW2, logoMaxH / imgH2, 1);
+          const finalLogoW2 = Math.max(10, imgW2 * ratio2);
+          const finalLogoH2 = Math.max(5, imgH2 * ratio2);
+          doc.addImage(state.logoDataUrl, 'PNG', marginX, currentY - 8, finalLogoW2, finalLogoH2);
+          logoEndXR = marginX + finalLogoW2 + 5;
+          headerTextYR = currentY + 2;
+        } catch(e) {
+          console.warn('Erro ao inserir logo no recibo:', e);
+        }
+      }
+
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(18);
+      doc.setFontSize(state.logoDataUrl ? 14 : 18);
       doc.setTextColor(30, 41, 59);
 
-      const headerBrandText = state.emitterName ? state.emitterName.toUpperCase() : 'PDFaz';
-      doc.text(headerBrandText, marginX, currentY);
+      const headerBrandTextR = state.emitterName ? state.emitterName.toUpperCase() : 'PDFaz';
+      doc.text(headerBrandTextR, logoEndXR, headerTextYR);
 
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8.5);
-      doc.setTextColor(5, 150, 105);
-      doc.text('Comprovante Oficial de Pagamento e Quitação', marginX, currentY + 5);
+      doc.setTextColor(...themeP);
+      doc.text('Comprovante Oficial de Pagamento e Quitação', logoEndXR, headerTextYR + 5);
 
       // Selo Retangular de Pagamento Confirmado no Topo Direito
       const stampWidth = 56;
@@ -1773,18 +2137,20 @@
       const stampX = pageWidth - marginX - stampWidth;
       const stampY = currentY - 6;
 
-      doc.setFillColor(236, 253, 245); // Emerald 50
-      doc.setDrawColor(5, 150, 105);
+      // Cor de fundo suave baseada no tema
+      const stampBg = themeP.map(c => Math.min(255, c + 200));
+      doc.setFillColor(...stampBg);
+      doc.setDrawColor(...themeP);
       doc.setLineWidth(0.6);
       doc.roundedRect(stampX, stampY, stampWidth, stampHeight, 2, 2, 'FD');
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(9);
-      doc.setTextColor(5, 150, 105);
+      doc.setTextColor(...themeP);
       doc.text('RECIBO DE QUITAÇÃO', stampX + (stampWidth / 2), stampY + 6, { align: 'center' });
 
       doc.setFontSize(7.5);
-      doc.setTextColor(6, 95, 70);
+      doc.setTextColor(...themeP);
       doc.text('PAGAMENTO CONFIRMADO', stampX + (stampWidth / 2), stampY + 11.5, { align: 'center' });
 
       // Detalhes do Recibo
@@ -1835,7 +2201,7 @@
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(8);
-      doc.setTextColor(5, 150, 105);
+      doc.setTextColor(...themeP);
       doc.text('RECEBEDOR (EMISSOR):', marginX + 4, currentY + 5.5);
 
       doc.setFont('helvetica', 'bold');
@@ -1857,7 +2223,7 @@
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(8);
-      doc.setTextColor(5, 150, 105);
+      doc.setTextColor(...themeP);
       doc.text('PAGADOR (CLIENTE):', clientX + 4, currentY + 5.5);
 
       doc.setFont('helvetica', 'bold');
@@ -1896,7 +2262,7 @@
         body: tableBody,
         theme: 'grid',
         headStyles: {
-          fillColor: [5, 150, 105], // Emerald 600
+          fillColor: themeP,
           textColor: [255, 255, 255],
           fontSize: 9,
           fontStyle: 'bold',
@@ -1907,7 +2273,7 @@
           font: 'helvetica',
           fontSize: 8.5,
           cellPadding: 3.2,
-          lineColor: [209, 250, 229], // Emerald 100
+          lineColor: [226, 232, 240],
           lineWidth: 0.2,
           textColor: [30, 41, 59]
         },
@@ -1955,9 +2321,9 @@
         doc.text(`- ${formatCurrency(totals.discount)}`, totalsX + totalsWidth - 4, totY2, { align: 'right' });
       }
 
-      // Tarja Total Quitado (Verde)
+      // Tarja Total Quitado (cor do tema)
       totY2 += 5.5;
-      doc.setFillColor(5, 150, 105);
+      doc.setFillColor(...themeP);
       doc.roundedRect(totalsX + 2, totY2, totalsWidth - 4, 9, 1.5, 1.5, 'F');
 
       doc.setFont('helvetica', 'bold');
@@ -1974,7 +2340,7 @@
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(8);
-      doc.setTextColor(5, 150, 105);
+      doc.setTextColor(...themeP);
       doc.text('COMPROVAÇÃO DE QUITAÇÃO & PIX:', marginX + 4, currentY + 5.5);
 
       if (qrDataUrl) {
@@ -2125,6 +2491,17 @@
     const validityFormatted = state.docValidity ? formatDateBR(state.docValidity) : '15 dias';
     const paymentMethod = state.paymentMethod || 'PIX';
 
+    // Tema de cores
+    const theme = state.docTheme || { primary: [37, 99, 235], secondary: [30, 41, 59] };
+    const themeRgb = (theme.primary || [37, 99, 235]).join(',');
+    const themeHex = '#' + (theme.primary || [37, 99, 235]).map(c => c.toString(16).padStart(2, '0')).join('');
+    const themeSecHex = '#' + (theme.secondary || [30, 41, 59]).map(c => c.toString(16).padStart(2, '0')).join('');
+
+    // Logo HTML
+    const logoHtml = state.logoDataUrl
+      ? `<img src="${state.logoDataUrl}" alt="Logomarca" class="a4-logo-img" style="max-height:60px; max-width:200px; object-fit:contain; display:block; margin-bottom:6px;">`
+      : '';
+
     const emitterName = escapeHtml(state.emitterName || 'Prestador não informado');
     const emitterDoc = escapeHtml(state.emitterDoc || '');
     const emitterPhone = escapeHtml(state.emitterPhone || '');
@@ -2256,17 +2633,18 @@
     }
 
     return `
-      <div class="native-a4-preview-sheet ${isOrcamento ? '' : 'recibo-mode'}">
-        <div class="a4-top-stripe"></div>
+      <div class="native-a4-preview-sheet ${isOrcamento ? '' : 'recibo-mode'}" style="--theme-primary:${themeHex}; --theme-secondary:${themeSecHex};">
+        <div class="a4-top-stripe" style="background:${themeHex};"></div>
 
         <!-- Cabeçalho Principal -->
         <header class="a4-header">
-          <div>
+          <div class="a4-header-brand">
+            ${logoHtml}
             <h2 class="a4-brand-name">${emitterName}</h2>
-            <div class="a4-brand-subtitle">${isOrcamento ? 'Proposta Comercial & Orçamento de Prestação de Serviços' : 'Comprovante Oficial de Pagamento e Quitação'}</div>
+            <div class="a4-brand-subtitle" style="color:${themeHex};">${isOrcamento ? 'Proposta Comercial & Orçamento de Prestação de Serviços' : 'Comprovante Oficial de Pagamento e Quitação'}</div>
           </div>
           <div class="a4-badge-box">
-            <div class="a4-type-badge">${isOrcamento ? 'ORÇAMENTO' : 'RECIBO DE QUITAÇÃO'}</div>
+            <div class="a4-type-badge" style="background:${themeHex};">${isOrcamento ? 'ORÇAMENTO' : 'RECIBO DE QUITAÇÃO'}</div>
             <ul class="a4-meta-list">
               <li><strong>Nº do Documento:</strong> ${docNum}</li>
               <li><strong>${isOrcamento ? 'Data de Emissão' : 'Data do Pagamento'}:</strong> ${dateFormatted}</li>
@@ -2280,7 +2658,7 @@
         <!-- Partes: Emissor & Cliente -->
         <div class="a4-parties-grid">
           <div class="a4-party-card">
-            <div class="a4-party-tag">Prestador / Emissor</div>
+            <div class="a4-party-tag" style="color:${themeHex};">Prestador / Emissor</div>
             <div class="a4-party-name">${emitterName}</div>
             <div class="a4-party-details">
               ${emitterDoc ? `<div><strong>CNPJ/CPF:</strong> ${emitterDoc}</div>` : ''}
@@ -2290,7 +2668,7 @@
           </div>
 
           <div class="a4-party-card">
-            <div class="a4-party-tag">Cliente / Destinatário</div>
+            <div class="a4-party-tag" style="color:${themeHex};">Cliente / Destinatário</div>
             <div class="a4-party-name">${clientName}</div>
             <div class="a4-party-details">
               ${clientDoc ? `<div><strong>Doc:</strong> ${clientDoc}</div>` : ''}
@@ -2301,7 +2679,7 @@
 
         <!-- Tabela de Itens -->
         <table class="a4-table">
-          <thead>
+          <thead style="background:${themeHex};">
             <tr>
               <th class="col-num">#</th>
               <th class="col-desc">Descrição do Item / Serviço</th>
@@ -2548,7 +2926,15 @@
     // Desconto
     if (dom.inputDiscount) {
       dom.inputDiscount.addEventListener('input', () => {
-        state.discount = parseFloat(dom.inputDiscount.value) || 0;
+        let val = parseFloat(dom.inputDiscount.value) || 0;
+        // Clamp para [0, 100] quando em modo porcentagem
+        if (state.discountType === 'percent') {
+          val = Math.min(100, Math.max(0, val));
+          if (parseFloat(dom.inputDiscount.value) > 100) {
+            dom.inputDiscount.value = 100;
+          }
+        }
+        state.discount = val;
         calculateTotals();
         updatePixQrCode();
         saveToLocalStorage();
@@ -2678,13 +3064,61 @@
       }
     });
 
-    // Botões auxiliares
+    // Botão Modelos
     if (dom.btnLoadExample) {
-      dom.btnLoadExample.addEventListener('click', () => {
-        loadExampleData();
-        updatePixQrCode();
+      dom.btnLoadExample.addEventListener('click', openModelsModal);
+    }
+
+    // Fechar modal de modelos
+    if (dom.btnCloseModels) {
+      dom.btnCloseModels.addEventListener('click', closeModelsModal);
+    }
+    if (dom.modelsModal) {
+      dom.modelsModal.addEventListener('click', (e) => {
+        if (e.target === dom.modelsModal) closeModelsModal();
       });
     }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && dom.modelsModal && dom.modelsModal.classList.contains('active')) {
+        closeModelsModal();
+      }
+    });
+
+    // Cards dos modelos no modal
+    document.querySelectorAll('[data-model-key]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-model-key');
+        loadModel(key);
+        updatePixQrCode();
+      });
+    });
+
+    // Logo upload
+    if (dom.btnUploadLogoTrigger) {
+      dom.btnUploadLogoTrigger.addEventListener('click', () => {
+        if (dom.logoFileInput) dom.logoFileInput.click();
+      });
+    }
+    if (dom.logoFileInput) {
+      dom.logoFileInput.addEventListener('change', (e) => {
+        handleLogoFileInput(e.target.files[0]);
+      });
+    }
+    // Drag and drop na zona de logo
+    const logoZone = document.getElementById('logo-upload-zone');
+    if (logoZone) {
+      logoZone.addEventListener('dragover', (e) => { e.preventDefault(); logoZone.classList.add('drag-over'); });
+      logoZone.addEventListener('dragleave', () => logoZone.classList.remove('drag-over'));
+      logoZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        logoZone.classList.remove('drag-over');
+        if (e.dataTransfer.files[0]) handleLogoFileInput(e.dataTransfer.files[0]);
+      });
+    }
+    if (dom.btnRemoveLogo) {
+      dom.btnRemoveLogo.addEventListener('click', removeLogo);
+    }
+
     if (dom.btnClearForm) {
       dom.btnClearForm.addEventListener('click', () => {
         clearForm();
