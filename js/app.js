@@ -2163,30 +2163,22 @@
         headerLeftEndYR = brandYR + 5;
       }
 
-      // Selo Retangular de Pagamento Confirmado no Topo Direito
-      const stampWidth = 56;
-      const stampHeight = 16;
-      const stampX = pageWidth - marginX - stampWidth;
-      const stampY = 10;
+      // Badge: RECIBO DE QUITAÇÃO (Fundo do tema, texto branco, sem borda)
+      const badgeWidthR = 54;
+      const badgeHeightR = 8;
+      const badgeXR = pageWidth - marginX - badgeWidthR;
+      const badgeYR = 10;
 
-      // Cor de fundo suave baseada no tema
-      const stampBg = themeP.map(c => Math.min(255, c + 200));
-      doc.setFillColor(...stampBg);
-      doc.setDrawColor(...themeP);
-      doc.setLineWidth(0.6);
-      doc.roundedRect(stampX, stampY, stampWidth, stampHeight, 2, 2, 'FD');
+      doc.setFillColor(...themeP);
+      doc.roundedRect(badgeXR, badgeYR, badgeWidthR, badgeHeightR, 2, 2, 'F');
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(9);
-      doc.setTextColor(...themeP);
-      doc.text('RECIBO DE QUITAÇÃO', stampX + (stampWidth / 2), stampY + 6, { align: 'center' });
-
-      doc.setFontSize(7.5);
-      doc.setTextColor(...themeP);
-      doc.text('PAGAMENTO CONFIRMADO', stampX + (stampWidth / 2), stampY + 11.5, { align: 'center' });
+      doc.setTextColor(255, 255, 255);
+      doc.text('RECIBO DE QUITAÇÃO', badgeXR + (badgeWidthR / 2), badgeYR + 5.5, { align: 'center' });
 
       // Detalhes do Recibo
-      const metaStartYR = stampY + stampHeight + 4;
+      const metaStartYR = badgeYR + badgeHeightR + 5;
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8.5);
       doc.setTextColor(71, 85, 105);
@@ -2679,7 +2671,7 @@
             <div class="a4-brand-subtitle" style="color:${themeHex};">${isOrcamento ? 'Proposta Comercial & Orçamento de Prestação de Serviços' : 'Comprovante Oficial de Pagamento e Quitação'}</div>
           </div>
           <div class="a4-badge-box">
-            <div class="a4-type-badge" style="background:${themeHex};">${isOrcamento ? 'ORÇAMENTO' : 'RECIBO DE QUITAÇÃO'}</div>
+            <div class="a4-type-badge" style="background:${themeHex}; color:#FFFFFF; border:none;">${isOrcamento ? 'ORÇAMENTO' : 'RECIBO DE QUITAÇÃO'}</div>
             <ul class="a4-meta-list">
               <li><strong>Nº do Documento:</strong> ${docNum}</li>
               <li><strong>${isOrcamento ? 'Data de Emissão' : 'Data do Pagamento'}:</strong> ${dateFormatted}</li>

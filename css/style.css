@@ -1753,8 +1753,8 @@ body.mode-recibo .btn-raw-pdf:hover {
 }
 
 .a4-type-badge {
-  background-color: #2563EB;
-  color: #FFFFFF;
+  background-color: var(--theme-primary, #2563EB);
+  color: #FFFFFF !important;
   font-size: 0.80rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -1762,12 +1762,13 @@ body.mode-recibo .btn-raw-pdf:hover {
   padding: 5px 14px;
   border-radius: 4px;
   margin-bottom: 8px;
+  border: none !important;
 }
 
 .native-a4-preview-sheet.recibo-mode .a4-type-badge {
-  background-color: #ECFDF5;
-  color: #059669;
-  border: 1.5px solid #059669;
+  background-color: var(--theme-primary, #2563EB);
+  color: #FFFFFF !important;
+  border: none !important;
 }
 
 .a4-meta-list {
@@ -1850,8 +1851,8 @@ body.mode-recibo .btn-raw-pdf:hover {
 }
 
 .native-a4-preview-sheet.recibo-mode .a4-table th {
-  background-color: #059669;
-  border-color: #059669;
+  background-color: var(--theme-primary, #059669);
+  border-color: var(--theme-primary, #059669);
 }
 
 .a4-table td {
